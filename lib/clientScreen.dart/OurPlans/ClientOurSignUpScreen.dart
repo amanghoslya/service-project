@@ -74,24 +74,26 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
         backgroundColor: AppColors.backgroungBg,
         centerTitle: true,
 
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            height: 44.h,
-            width: 44.w,
-            padding: EdgeInsets.only(left: 5.w),
-            margin: EdgeInsets.only(left: 16.w),
-            decoration: BoxDecoration(
-              color: AppColors.buttonText,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.buttonBg,
-                size: 15.sp,
+        leading: Center(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 44.h,
+              width: 44.w,
+              padding: EdgeInsets.only(left: 5.w),
+              margin: EdgeInsets.only(left: 16.w),
+              decoration: BoxDecoration(
+                color: AppColors.buttonText,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.buttonBg,
+                  size: 15.sp,
+                ),
               ),
             ),
           ),
@@ -385,6 +387,7 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
                     controller: dateController,
                     readOnly: true,
                     decoration: InputDecoration(
+                      isDense: true,
                       hintText: "dd-mm-yy",
                       suffixIcon: InkWell(
                         onTap: () async {

@@ -48,23 +48,25 @@ class _ClientquickquotescreenState extends State<Clientquickquotescreen> {
         backgroundColor: AppColors.backgroungBg,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            width: 44.w,
-            height: 44.h,
-            padding: EdgeInsets.only(left: 5.w),
-            margin: EdgeInsets.only(left: 16.w),
-            decoration: BoxDecoration(
-              color: AppColors.buttonText,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.arrow_back_ios,
-              size: 15.sp,
-              color: AppColors.buttonBg,
+        leading: Center(
+          child: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              width: 44.w,
+              height: 44.h,
+              padding: EdgeInsets.only(left: 5.w),
+              margin: EdgeInsets.only(left: 16.w),
+              decoration: BoxDecoration(
+                color: AppColors.buttonText,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 15.sp,
+                color: AppColors.buttonBg,
+              ),
             ),
           ),
         ),
