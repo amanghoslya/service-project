@@ -65,7 +65,7 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
                 SizedBox(height: 59.h),
                 _login(lable: "Email  / Phone", hint: "Kenny@example.com"),
                 SizedBox(height: 16.h),
-                _login(lable: "Password", hint: "Enter Your Email"),
+                _login(lable: "Password", hint: "Enter Your Password"),
                 SizedBox(height: 10.h),
                 Align(
                   alignment: Alignment.centerRight,

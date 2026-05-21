@@ -1,3 +1,4 @@
+import 'package:dwelleasy_ghana/clientScreen.dart/OurPlans/ClientOurPlanDetilesScreen.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ class Clienthomescreen extends StatefulWidget {
 }
 
 class _ClienthomescreenState extends State<Clienthomescreen> {
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,27 +106,206 @@ class _ClienthomescreenState extends State<Clienthomescreen> {
         child: Column(
           children: [
             SizedBox(height: 20.h),
-            Container(
-              height: 48.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.buttonBg,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Center(
-                child: Text(
-                  "Our Plans",
-                  style: GoogleFonts.outfit(
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.buttonText,
-                    letterSpacing: -0.2,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Clientourplandetilesscreen(),
+                  ),
+                );
+              },
+              child: Container(
+                height: 48.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.buttonBg,
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Center(
+                  child: Text(
+                    "Our Plans",
+                    style: GoogleFonts.outfit(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.buttonText,
+                      letterSpacing: -0.2,
+                    ),
                   ),
                 ),
               ),
             ),
+            SizedBox(height: 20.h),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadiusGeometry.circular(12.r),
+                  child: Image.asset(
+                    "assets/WhatsApp Image 2026-05-07 at 12.12.29 PM.jpeg",
+                    width: double.infinity,
+                    height: 159.h,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  left: 15.w,
+                  top: 42.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Basic Plan",
+                        style: GoogleFonts.outfit(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.buttonText,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      Text(
+                        "2 call-outs per year (perfect for newer homes)",
+                        style: GoogleFonts.parkinsans(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.buttonText,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadiusGeometry.circular(12.r),
+                  child: Image.asset(
+                    "assets/ClientImage/WhatsApp Image 2026-05-16 at 3.42.35 PM.jpeg",
+                    width: double.infinity,
+                    height: 159.h,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  left: 15.w,
+                  top: 42.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Premium Plan",
+                        style: GoogleFonts.outfit(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.5,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      Text(
+                        "Unlimited call-outs (total peace of mind)",
+                        style: GoogleFonts.parkinsans(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.5,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+
+        backgroundColor: Color(0xff34383D),
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        showUnselectedLabels: true,
+        selectedLabelStyle: GoogleFonts.inter(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+          letterSpacing: -0.2,
+        ),
+
+        unselectedLabelStyle: GoogleFonts.inter(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+          letterSpacing: -0.2,
+        ),
+        items: [
+          BottomNavigationBarItem(
+            icon: Container(
+              margin: EdgeInsets.only(bottom: 6.h, top: 10.h),
+              height: 51.h,
+              width: 51.w,
+              decoration: BoxDecoration(
+                color: currentIndex == 0 ? Color(0xffF2D701) : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.home_filled, color: Color(0xff04254E)),
+            ),
+            label: "HOME",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Container(
+              margin: EdgeInsets.only(bottom: 6.h, top: 10.h),
+              height: 51.h,
+              width: 51.w,
+              decoration: BoxDecoration(
+                color: currentIndex == 1 ? Color(0xffF2D701) : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.bar_chart, color: Color(0xff04254E)),
+            ),
+            label: "REQUEST",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Container(
+              margin: EdgeInsets.only(bottom: 6.h, top: 10.h),
+              height: 51.h,
+              width: 51.w,
+              decoration: BoxDecoration(
+                color: currentIndex == 2 ? Color(0xffF2D701) : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.inbox, color: Color(0xff04254E)),
+            ),
+            label: "PLAN",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Container(
+              height: 51.h,
+              width: 51.w,
+              margin: EdgeInsets.only(bottom: 6.h, top: 10.h),
+              decoration: BoxDecoration(
+                color: currentIndex == 3 ? Color(0xffF2D701) : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.person, color: Color(0xff04254E)),
+            ),
+            label: "PROFILE",
+          ),
+        ],
       ),
     );
   }

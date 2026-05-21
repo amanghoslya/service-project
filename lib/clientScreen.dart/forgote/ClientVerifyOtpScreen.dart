@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dwelleasy_ghana/clientScreen.dart/ClientLoginScreen.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +198,7 @@ class _ClientverifyotpscreenState extends State<Clientverifyotpscreen> {
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(43, 43, 43, 0.12),
                     borderRadius: BorderRadius.circular(8.r),
-                    border: Border.all(color: Color.fromRGBO(49, 49, 49, 0.14)),
+                    border: Border.all(color: Colors.black),
                   ),
                 ),
 
@@ -236,7 +237,14 @@ class _ClientverifyotpscreenState extends State<Clientverifyotpscreen> {
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Clientloginscreen(),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Next",
                     style: GoogleFonts.outfit(
