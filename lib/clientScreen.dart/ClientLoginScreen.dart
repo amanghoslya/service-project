@@ -102,7 +102,7 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Clienthomescreen(),
+                          builder: (context) => ClientMyBottomNav(),
                         ),
                       );
                     },
