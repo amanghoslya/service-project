@@ -1,18 +1,26 @@
+import 'dart:developer';
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/forgot/forgotPasswordScreen.dart';
 import 'package:dwelleasy_ghana/screen/homeScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Loginscreen extends StatefulWidget {
+class Loginscreen extends ConsumerStatefulWidget {
   const Loginscreen({super.key});
 
   @override
-  State<Loginscreen> createState() => _LoginscreenState();
+  ConsumerState<Loginscreen> createState() => _LoginscreenState();
 }
 
-class _LoginscreenState extends State<Loginscreen> {
+class _LoginscreenState extends ConsumerState<Loginscreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isPasswordHide = true;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,10 +71,18 @@ class _LoginscreenState extends State<Loginscreen> {
               SizedBox(height: 26.h),
               _loginForm(
                 label: "Email or Phone",
-                hintText: "Kenny@example.com",
+                hintText: "Enter Your Email Or Phone",
+                controller: emailController,
+                type: TextInputType.emailAddress,
               ),
               SizedBox(height: 16.h),
-              _loginForm(label: "Password", hintText: "**************"),
+              _loginForm(
+                label: "Password",
+                hintText: "**************",
+                controller: passwordController,
+                type: TextInputType.visiblePassword,
+                obscureText: true,
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -77,7 +93,7 @@ class _LoginscreenState extends State<Loginscreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                         builder: (context) => ForgotPasswordScreen(),
                       ),
                     );
@@ -102,20 +118,51 @@ class _LoginscreenState extends State<Loginscreen> {
                   ),
                   backgroundColor: AppColors.buttonBg,
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Homescreen()),
+                onPressed: () async {
+                  if (emailController.text.trim().isEmpty) {
+                    return;
+                  }
+                  if (emailController.text.trim().isEmpty) {
+                    return;
+                  }
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  final authService = ref.read(authServiceProvider);
+                  final success = await authService.employeeLogin(
+                    email: emailController.text,
+                    password: passwordController.text,
+                    context: context,
                   );
+                  setState(() {
+                    isLoading = false;
+                  });
+                  if (success) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      CupertinoPageRoute(builder: (context) => MyBottomNav()),
+                      (route) => false,
+                    );
+                  }
                 },
-                child: Text(
-                  "Login",
-                  style: GoogleFonts.outfit(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.buttonText,
-                  ),
-                ),
+                child: isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: AppColors.buttonText,
+                          strokeWidth: 2.w,
+                        ),
+                      )
+                    : Text(
+                        "Login",
+                        style: GoogleFonts.outfit(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
               ),
               SizedBox(height: 10.h),
             ],
@@ -125,7 +172,13 @@ class _LoginscreenState extends State<Loginscreen> {
     );
   }
 
-  Widget _loginForm({required String label, required String hintText}) {
+  Widget _loginForm({
+    required String label,
+    required String hintText,
+    required TextEditingController controller,
+    required TextInputType type,
+    bool obscureText = false,
+  }) {
     return Container(
       padding: EdgeInsets.only(
         left: 12.w,
@@ -149,9 +202,17 @@ class _LoginscreenState extends State<Loginscreen> {
             ),
           ),
           TextFormField(
-            style: TextStyle(color: Colors.white),
+            obscureText: obscureText ? isPasswordHide : false,
+            keyboardType: type,
+            controller: controller,
+            cursorColor: Colors.white,
+            style: GoogleFonts.parkinsans(
+              color: Colors.white, // typed text white
+              fontSize: 14.sp,
+            ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.zero,
+              contentPadding: EdgeInsets.only(top: 12.h),
               border: InputBorder.none,
               hint: Text(
                 hintText,
@@ -161,6 +222,22 @@ class _LoginscreenState extends State<Loginscreen> {
                   color: Color.fromARGB(127, 255, 255, 255),
                 ),
               ),
+              suffixIcon: obscureText
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isPasswordHide = !isPasswordHide;
+                        });
+                      },
+                      icon: Icon(
+                        isPasswordHide
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.white,
+                        size: 20.sp,
+                      ),
+                    )
+                  : null,
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/loginScreen.dart';
 import 'package:dwelleasy_ghana/screen/registerScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -91,7 +92,7 @@ class WelComeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Loginscreen()),
+                  CupertinoPageRoute(builder: (context) => Loginscreen()),
                 );
               },
               child: Text(
@@ -129,7 +130,7 @@ class WelComeScreen extends StatelessWidget {
                       ..onTap = () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (context) => RegisterScreen(),
                           ),
                         );

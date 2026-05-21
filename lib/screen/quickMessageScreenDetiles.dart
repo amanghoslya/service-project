@@ -19,20 +19,20 @@ class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 152.h,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              decoration: const BoxDecoration(color: Color(0xffF2D701)),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // 🔥 Back Icon (Left Side)
-                  Align(
-                    alignment: Alignment.centerLeft,
+          Container(
+            height: 152.h,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            decoration: const BoxDecoration(color: Color(0xffF2D701)),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // 🔥 Back Icon (Left Side)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child: Container(
                       height: 44.r,
                       width: 44.r,
@@ -51,38 +51,38 @@ class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
                       ),
                     ),
                   ),
-
-                  // 🔥 Center Text
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Quick Message",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.outfit(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xff04254E),
-                          letterSpacing: -0.5,
-                        ),
+                ),
+          
+                // 🔥 Center Text
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Quick Message",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xff04254E),
+                        letterSpacing: -0.5,
                       ),
-
-                      SizedBox(height: 8.h),
-
-                      Text(
-                        "View your assigned shifts and timings",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.outfit(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xff04254E),
-                          letterSpacing: -0.5,
-                        ),
+                    ),
+          
+                    SizedBox(height: 8.h),
+          
+                    Text(
+                      "View your assigned shifts and timings",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff04254E),
+                        letterSpacing: -0.5,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           SizedBox(height: 37.h),

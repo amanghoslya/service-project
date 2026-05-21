@@ -1,18 +1,25 @@
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/core/utils/showMessage.dart';
+import 'package:dwelleasy_ghana/data/provider/myLeaveProvider.dart';
+import 'package:dwelleasy_ghana/screen/drawerScreen/leaveStatusScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Leaverequestscreen extends StatefulWidget {
+class Leaverequestscreen extends ConsumerStatefulWidget {
   const Leaverequestscreen({super.key});
 
   @override
-  State<Leaverequestscreen> createState() => _LeaverequestscreenState();
+  ConsumerState<Leaverequestscreen> createState() => _LeaverequestscreenState();
 }
 
-class _LeaverequestscreenState extends State<Leaverequestscreen> {
+class _LeaverequestscreenState extends ConsumerState<Leaverequestscreen> {
+  final reasonController = TextEditingController();
   DateTime? selectedDate;
+
   Future<void> pickDate() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -23,9 +30,22 @@ class _LeaverequestscreenState extends State<Leaverequestscreen> {
 
     if (pickedDate != null) {
       setState(() {
-        selectedDate = pickedDate;
+        // only date store without time
+        selectedDate = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+        );
       });
     }
+  }
+
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    reasonController.dispose();
+    super.dispose();
   }
 
   @override
@@ -99,7 +119,8 @@ class _LeaverequestscreenState extends State<Leaverequestscreen> {
               ),
             ),
             SizedBox(height: 12.h),
-            GestureDetector(
+            InkWell(
+              onTap: pickDate,
               child: Container(
                 height: 55.h,
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -150,11 +171,12 @@ class _LeaverequestscreenState extends State<Leaverequestscreen> {
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: TextField(
+                controller: reasonController,
                 maxLines: 5,
                 minLines: 5,
                 scrollPhysics: BouncingScrollPhysics(),
                 style: GoogleFonts.parkinsans(
-                  color: Colors.white, // typed text white
+                  color: Colors.white,
                   fontSize: 14.sp,
                 ),
                 keyboardType: TextInputType.streetAddress,
@@ -194,22 +216,90 @@ class _LeaverequestscreenState extends State<Leaverequestscreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(3398.w, 53.h),
+                disabledBackgroundColor: AppColors.buttonBg.withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.r),
                   side: BorderSide.none,
                 ),
                 backgroundColor: AppColors.buttonBg,
               ),
-              onPressed: () {},
-              child: Text(
-                "Submit Request",
-                style: GoogleFonts.inter(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.buttonText,
-                  letterSpacing: -0.3,
-                ),
-              ),
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      if (selectedDate == null) {
+                        showErrorMessage(
+                          message: "Please select leave date",
+                          context: context,
+                        );
+                        return;
+                      }
+
+                      if (reasonController.text.trim().isEmpty) {
+                        showErrorMessage(
+                          message: "Please enter reason",
+                          context: context,
+                        );
+                        return;
+                      }
+
+                      try {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final serviceProvider = ref.read(authServiceProvider);
+                        final response = await serviceProvider
+                            .createLeaveRequest(
+                              date: selectedDate!
+                                  .toUtc()
+                                  .millisecondsSinceEpoch,
+                              reason: reasonController.text.trim(),
+                            );
+
+                        if (response?.code == 0 && response?.error == false) {
+                          showSuccessMessage(
+                            message: response?.message ?? "",
+                            context: context,
+                          );
+                          ref.invalidate(leaveRequestProvider);
+                          Navigator.pushReplacement(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => Leavestatusscreen(),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        showErrorMessage(
+                          message: e.toString(),
+                          context: context,
+                        );
+                      } finally {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    },
+
+              child: isLoading
+                  ? SizedBox(
+                      height: 22.h,
+                      width: 22.w,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Text(
+                      "Submit Request",
+                      style: GoogleFonts.inter(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.buttonText,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
             ),
             SizedBox(height: 30.h),
           ],

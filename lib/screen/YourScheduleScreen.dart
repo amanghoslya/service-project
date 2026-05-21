@@ -1,12 +1,14 @@
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/quickMessageScreen.dart';
 import 'package:dwelleasy_ghana/screen/quickMessageScreenDetiles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Yourschedulescreen extends StatefulWidget {
-  const Yourschedulescreen({super.key});
+  final bool isShowBack;
+  const Yourschedulescreen({super.key, this.isShowBack = true});
 
   @override
   State<Yourschedulescreen> createState() => _YourschedulescreenState();
@@ -20,70 +22,74 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
       backgroundColor: AppColors.scaffoldBg,
       body: Column(
         children: [
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 152.h,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              decoration: const BoxDecoration(color: Color(0xffF2D701)),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // 🔥 Back Icon (Left Side)
+          Container(
+            height: 150.h,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            decoration: const BoxDecoration(color: Color(0xffF2D701)),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                /// BACK BUTTON
+                if (widget.isShowBack)
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Container(
-                      height: 44.r,
-                      width: 44.r,
-                      decoration: const BoxDecoration(
-                        color: Color(0xff04254E),
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 5.w),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Color(0xffF2D701),
-                          size: 15.sp,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: 44.r,
+                        width: 44.r,
+                        decoration: const BoxDecoration(
+                          color: Color(0xff04254E),
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Color(0xffF2D701),
+                            size: 15.sp,
+                          ),
                         ),
                       ),
                     ),
                   ),
 
-                  // 🔥 Center Text
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Your Schedule",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.outfit(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xff04254E),
-                          letterSpacing: -0.5,
-                        ),
+                /// CENTER TEXT
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Your Schedule",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xff04254E),
+                        letterSpacing: -0.5,
+                        height: 1,
                       ),
+                    ),
 
-                      SizedBox(height: 8.h),
+                    SizedBox(height: 8.h),
 
-                      Text(
-                        "View your assigned shifts and timings",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.outfit(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xff04254E),
-                          letterSpacing: -0.5,
-                        ),
+                    Text(
+                      "View your assigned shifts and timings",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff04254E),
+                        letterSpacing: -0.5,
+                        height: 1,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           SizedBox(height: 15.h),
@@ -127,9 +133,7 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
                   ),
                 ),
               ),
-
               SizedBox(width: 10.w),
-
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -187,7 +191,6 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
                   color: const Color(0xff34383D),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -201,9 +204,7 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
                         letterSpacing: -0.5,
                       ),
                     ),
-
                     SizedBox(height: 14.h),
-
                     // 🔥 Time
                     Text(
                       "Time: 9:00 AM - 9:30 AM",
@@ -214,7 +215,6 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
                         letterSpacing: -0.5,
                       ),
                     ),
-
                     SizedBox(height: 10.h),
                     Text(
                       "Area: Thema",
@@ -244,7 +244,7 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (context) => Quickmessagescreen(),
                           ),
                         );
@@ -278,7 +278,7 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) =>
                                       Quickmessagescreendetiles(),
                                 ),
