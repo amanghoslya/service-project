@@ -5,5 +5,5 @@ class AppColors {
   static const Color buttonBg = Color(0xFFF2D701);
   static const Color buttonText = Color(0xFF04254E);
   static const Color cardBg = Color.fromARGB(20, 255, 255, 255);
-  static const Color backgroungBg = Color(0xffFFFFFF);
+  static const Color backgroungBg = Color(0xFFF9FAF7);
 }

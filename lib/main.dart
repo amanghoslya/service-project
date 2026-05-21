@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dwelleasy_ghana/clientScreen.dart/ClientWelcome.dart';
 import 'package:dwelleasy_ghana/core/utils/key.dart';
 import 'package:dwelleasy_ghana/screen/homeScreen.dart';
@@ -60,8 +59,8 @@ class MyApp extends StatelessWidget {
               // tested with just a hot reload.
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            home: token == null ? WelComeScreen() : MyBottomNav(),
-            // home: Clientwelcome(),
+            // home: token == null ? WelComeScreen() : MyBottomNav(),
+            home: Clientwelcome(),
           ),
         );
       },
