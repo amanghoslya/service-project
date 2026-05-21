@@ -1,8 +1,11 @@
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/drawerScreen/notificationSettingScreen.dart';
+import 'package:dwelleasy_ghana/screen/loginScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Settingscreen extends StatefulWidget {
   const Settingscreen({super.key});
@@ -77,7 +80,42 @@ class _SettingscreenState extends State<Settingscreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
+                          var box = Hive.box("userbox");
+                          box.clear();
                           Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              elevation: 0,
+                              backgroundColor: Color(0xffB71C1C),
+                              behavior: SnackBarBehavior.floating,
+                              duration: const Duration(seconds: 3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                              margin: EdgeInsets.only(
+                                left: 16.w,
+                                right: 16.w,
+                                bottom: 20.h,
+                              ),
+                              content: Text(
+                                "Logout Sucessfull",
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -0.3,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          );
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => Loginscreen(),
+                            ),
+                            (route) => false,
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 14.h),

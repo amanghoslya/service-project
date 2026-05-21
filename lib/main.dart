@@ -1,11 +1,21 @@
+import 'dart:developer';
+
 import 'package:dwelleasy_ghana/clientScreen.dart/ClientWelcome.dart';
+import 'package:dwelleasy_ghana/core/utils/key.dart';
+import 'package:dwelleasy_ghana/screen/homeScreen.dart';
 import 'package:dwelleasy_ghana/screen/welComeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox("userbox");
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,6 +24,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box("userbox");
+    var token = box.get("token");
+    log(token ?? "No Token Found");
     return ScreenUtilInit(
       designSize: Size(430, 932),
       minTextAdapt: true,
@@ -26,6 +39,7 @@ class MyApp extends StatelessWidget {
             statusBarBrightness: Brightness.dark,
           ),
           child: MaterialApp(
+            navigatorKey: navigatorKey,
             title: 'DwellEasy Ghana',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -46,8 +60,8 @@ class MyApp extends StatelessWidget {
               // tested with just a hot reload.
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            // home: WelComeScreen(),
-            home: Clientwelcome(),
+            home: token == null ? WelComeScreen() : MyBottomNav(),
+            // home: Clientwelcome(),
           ),
         );
       },

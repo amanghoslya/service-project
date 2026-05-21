@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +19,6 @@ class _CompletejobscreenState extends State<Completejobscreen> {
 
   final ImagePicker picker = ImagePicker();
 
-  /// 📸 Multiple Images From Gallery
   Future<void> getImagesFromGallery() async {
     final List<XFile> pickedFiles = await picker.pickMultiImage();
 
@@ -43,7 +41,6 @@ class _CompletejobscreenState extends State<Completejobscreen> {
     }
   }
 
-  /// 👉 Image Picker Bottom Sheet
   void showImagePicker() {
     showCupertinoModalPopup(
       context: context,
@@ -56,7 +53,6 @@ class _CompletejobscreenState extends State<Completejobscreen> {
             },
             child: const Text("Gallery"),
           ),
-
           CupertinoActionSheetAction(
             onPressed: () async {
               Navigator.pop(context);
@@ -65,7 +61,6 @@ class _CompletejobscreenState extends State<Completejobscreen> {
             child: const Text("Camera"),
           ),
         ],
-
         cancelButton: CupertinoActionSheetAction(
           onPressed: () {
             Navigator.pop(context);
@@ -187,43 +182,34 @@ class _CompletejobscreenState extends State<Completejobscreen> {
               TextField(
                 maxLines: 5,
                 minLines: 5,
-
                 scrollPadding: EdgeInsets.only(top: 11.h, left: 15.w),
-
                 style: GoogleFonts.parkinsans(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
                 ),
-
                 cursorColor: Colors.white,
-
                 decoration: InputDecoration(
                   hintText:
                       "Enter work completion remarks...\n(Work Completed. No Extra Fittings)",
-
                   hintStyle: GoogleFonts.parkinsans(
                     fontWeight: FontWeight.w400,
                     color: Color(0xff7B7B7B),
                     fontSize: 14.sp,
                     letterSpacing: -0.5,
                   ),
-
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 11.h,
                     horizontal: 15.w,
                   ),
-
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: Colors.white),
                   ),
-
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: Colors.white),
                   ),
-
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: BorderSide(color: Colors.white),
@@ -271,10 +257,7 @@ class _CompletejobscreenState extends State<Completejobscreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 15.h),
-
-              // 👇 Image niche show hogi
               if (_image.isNotEmpty)
                 Wrap(
                   spacing: 12.w,
@@ -292,8 +275,6 @@ class _CompletejobscreenState extends State<Completejobscreen> {
                             fit: BoxFit.cover,
                           ),
                         ),
-
-                        // ❌ Remove Image
                         Positioned(
                           top: -10.h,
                           right: -10.w,

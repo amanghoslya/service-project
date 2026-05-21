@@ -1,5 +1,6 @@
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/detilesScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,20 +19,20 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
       backgroundColor: AppColors.scaffoldBg,
       body: Column(
         children: [
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 152.h,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              decoration: const BoxDecoration(color: Color(0xffF2D701)),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // 🔥 Back Icon (Left Side)
-                  Align(
-                    alignment: Alignment.centerLeft,
+          Container(
+            height: 150.h,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            decoration: const BoxDecoration(color: Color(0xffF2D701)),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // 🔥 Back Icon (Left Side)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child: Container(
                       height: 44.r,
                       width: 44.r,
@@ -50,38 +51,41 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                       ),
                     ),
                   ),
+                ),
 
-                  // 🔥 Center Text
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Quick Message",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.outfit(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xff04254E),
-                          letterSpacing: -0.5,
-                        ),
+                // 🔥 Center Text
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Quick Message",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xff04254E),
+                        letterSpacing: -0.5,
+                        height: 1,
                       ),
+                    ),
 
-                      SizedBox(height: 8.h),
+                    SizedBox(height: 8.h),
 
-                      Text(
-                        "View your assigned shifts and timings",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.outfit(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xff04254E),
-                          letterSpacing: -0.5,
-                        ),
+                    Text(
+                      "View your assigned shifts and timings",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff04254E),
+                        letterSpacing: -0.5,
+                        height: 1,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           SizedBox(height: 15.h),
@@ -159,7 +163,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (context) => Detilesscreen(),
                           ),
                         );

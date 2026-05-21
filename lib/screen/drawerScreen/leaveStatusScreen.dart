@@ -1,19 +1,23 @@
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/data/provider/myLeaveProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class Leavestatusscreen extends StatefulWidget {
+class Leavestatusscreen extends ConsumerStatefulWidget {
   const Leavestatusscreen({super.key});
 
   @override
-  State<Leavestatusscreen> createState() => _LeavestatusscreenState();
+  ConsumerState<Leavestatusscreen> createState() => _LeavestatusscreenState();
 }
 
-class _LeavestatusscreenState extends State<Leavestatusscreen> {
+class _LeavestatusscreenState extends ConsumerState<Leavestatusscreen> {
   @override
   Widget build(BuildContext context) {
+    final leaveState = ref.watch(leaveRequestProvider);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
@@ -67,216 +71,150 @@ class _LeavestatusscreenState extends State<Leavestatusscreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 16.w, right: 16.w),
-        child: Column(
-          children: [
-            SizedBox(height: 40.h),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 15.w, top: 20.h, bottom: 20.h),
-              decoration: BoxDecoration(
-                color: Color(0xff34383D),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Leave Request - 20 Apr 2025",
-                    style: GoogleFonts.outfit(
-                      fontSize: 18.sp,
-                      color: Color(0xffFFFFFF),
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  SizedBox(height: 11.h),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Reason:",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -0.5,
-                            color: Color(0xffFFFFFF),
-                          ),
-                        ),
-                        TextSpan(
-                          text: " Personal Work",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(255, 255, 255, 0.8),
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 11.h),
-                  Container(
-                    height: 22.h,
-                    width: 59.w,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 94, 93, 82),
-                      borderRadius: BorderRadius.circular(50.r),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Pending",
-                        style: GoogleFonts.outfit(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xffF8BD00),
-                          letterSpacing: -0.5,
-                        ),
+      body: leaveState.when(
+        data: (data) {
+          if (data.data?.docs?.isEmpty ?? true) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 120.h,
+                      width: 120.w,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff34383D),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.event_busy_rounded,
+                        size: 60.sp,
+                        color: AppColors.buttonBg,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 15.w, top: 20.h, bottom: 20.h),
-              decoration: BoxDecoration(
-                color: Color(0xff34383D),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Leave Request - 15 Apr 2025",
-                    style: GoogleFonts.outfit(
-                      fontSize: 18.sp,
-                      color: Color(0xffFFFFFF),
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  SizedBox(height: 11.h),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Reason:",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -0.5,
-                            color: Color(0xffFFFFFF),
-                          ),
-                        ),
-                        TextSpan(
-                          text: " Family Function",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(255, 255, 255, 0.8),
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 11.h),
-                  Container(
-                    height: 22.h,
-                    width: 68.w,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 94, 93, 82),
-                      borderRadius: BorderRadius.circular(50.r),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Approved",
-                        style: GoogleFonts.outfit(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xffF2D701),
-                          letterSpacing: -0.5,
-                        ),
+                    SizedBox(height: 24.h),
+                    Text(
+                      "No Leave Requests Found",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 15.w, top: 20.h, bottom: 20.h),
-              decoration: BoxDecoration(
-                color: Color(0xff34383D),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Leave Request - 15 Apr 2025",
-                    style: GoogleFonts.outfit(
-                      fontSize: 18.sp,
-                      color: Color(0xffFFFFFF),
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  SizedBox(height: 11.h),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Reason:",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -0.5,
-                            color: Color(0xffFFFFFF),
-                          ),
-                        ),
-                        TextSpan(
-                          text: " Family Function",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(255, 255, 255, 0.8),
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 11.h),
-                  Container(
-                    height: 22.h,
-                    width: 62.w,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 244, 218, 210),
-                      borderRadius: BorderRadius.circular(50.r),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Rejected",
-                        style: GoogleFonts.outfit(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xffFF3D00),
-                          letterSpacing: -0.5,
-                        ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      "You haven’t submitted any leave requests yet.",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.parkinsans(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromRGBO(255, 255, 255, 0.6),
+                        letterSpacing: -0.3,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+            );
+          }
+          return ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: data.data?.docs?.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 20.h),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                        left: 15.w,
+                        top: 20.h,
+                        bottom: 20.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xff34383D),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Leave Request - ${DateFormat('dd MMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(data.data!.docs![index].leaveDate!))}",
+                            style: GoogleFonts.outfit(
+                              fontSize: 18.sp,
+                              color: Color(0xffFFFFFF),
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          SizedBox(height: 11.h),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Reason : ",
+                                  style: GoogleFonts.parkinsans(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.5,
+                                    color: Color(0xffFFFFFF),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "${data.data?.docs?[index].reason}",
+                                  style: GoogleFonts.parkinsans(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromRGBO(255, 255, 255, 0.8),
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 11.h),
+                          Container(
+                            height: 22.h,
+                            width: 59.w,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 94, 93, 82),
+                              borderRadius: BorderRadius.circular(50.r),
+                            ),
+                            child: Center(
+                              child: Text(
+                                data.data!.docs?[index].status ?? "",
+                                style: GoogleFonts.outfit(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xffF8BD00),
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        error: (error, stackTrace) {
+          return Center(
+            child: Text(
+              error.toString(),
+              style: GoogleFonts.inter(color: Colors.white),
             ),
-          ],
-        ),
+          );
+        },
+        loading: () =>
+            Center(child: CircularProgressIndicator(color: AppColors.buttonBg)),
       ),
     );
   }

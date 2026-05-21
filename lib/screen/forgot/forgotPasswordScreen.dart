@@ -1,17 +1,25 @@
+import 'dart:developer';
+
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/forgot/verifyOtpScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  final emailController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +88,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                     TextFormField(
+                      cursorColor: Colors.white,
+                      controller: emailController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.zero,
@@ -107,20 +117,62 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                   backgroundColor: AppColors.buttonBg,
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => VerifyOtpScreen()),
-                  );
+                onPressed: () async {
+                  if (emailController.text.trim().isEmpty) {
+                    return;
+                  }
+
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  try {
+                    final forgotService = ref.read(authServiceProvider);
+
+                    final response = await forgotService.forgotPassword(
+                      email: emailController.text.trim(),
+                      context: context,
+                    );
+
+                    if (response.code == 0 && response.error == false) {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => VerifyOtpScreen(
+                            token: response.data!.token.toString(),
+                            email: emailController.text.trim(),
+                          ),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    log(e.toString());
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
                 },
-                child: Text(
-                  "Send OTP",
-                  style: GoogleFonts.outfit(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.buttonText,
-                  ),
-                ),
+                child: isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: AppColors.buttonText,
+                          strokeWidth: 2.w,
+                        ),
+                      )
+                    : Text(
+                        "Send OTP",
+                        style: GoogleFonts.outfit(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
               ),
               SizedBox(height: 20.h),
             ],

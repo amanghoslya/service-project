@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/completeJobScreen.dart';
 import 'package:dwelleasy_ghana/screen/locationScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Detilesscreen extends StatefulWidget {
   const Detilesscreen({super.key});
@@ -128,6 +131,62 @@ class _DetilesscreenState extends State<Detilesscreen> {
     );
   }
 
+  List<File> _image = [];
+
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> getImagesFromGallery() async {
+    final List<XFile> pickedFiles = await picker.pickMultiImage();
+
+    if (pickedFiles.isNotEmpty) {
+      setState(() {
+        _image.addAll(pickedFiles.map((e) => File(e.path)).toList());
+      });
+    }
+  }
+
+  /// 📸 Camera Image
+  Future<void> getImageFromCamera() async {
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        _image.add(File(pickedFile.path));
+      });
+    }
+  }
+
+  void showImagePicker() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await getImagesFromGallery();
+            },
+            child: const Text("Gallery"),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(context);
+              await getImageFromCamera();
+            },
+            child: const Text("Camera"),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("Cancel"),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,8 +194,6 @@ class _DetilesscreenState extends State<Detilesscreen> {
       appBar: AppBar(
         backgroundColor: AppColors.scaffoldBg,
         foregroundColor: Colors.white,
-
-        // iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -161,7 +218,7 @@ class _DetilesscreenState extends State<Detilesscreen> {
                     left: BorderSide(color: const Color(0xffF2D701)),
                     right: BorderSide.none,
                     bottom: BorderSide.none,
-                    top: BorderSide.none, // 👈 IMPORTANT (NO TOP BORDER)
+                    top: BorderSide.none,
                   ),
                 ),
                 child: Column(
@@ -185,7 +242,6 @@ class _DetilesscreenState extends State<Detilesscreen> {
                         color: const Color.fromARGB(255, 107, 101, 49),
                         borderRadius: BorderRadius.circular(50.r),
                       ),
-
                       child: Center(
                         child: Text(
                           "Assigned Job",
@@ -298,30 +354,84 @@ class _DetilesscreenState extends State<Detilesscreen> {
                 ),
               ),
               SizedBox(height: 20.h),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 18.h),
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 107, 101, 49),
-                  borderRadius: BorderRadius.circular(50.r),
-                ),
-                child: Center(
-                  child: Text(
-                    "Upload Work Photo",
-                    style: GoogleFonts.outfit(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xffF2D701),
-                      letterSpacing: -0.3,
+              InkWell(
+                onTap: () {
+                  showImagePicker();
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 18.h),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 107, 101, 49),
+                    borderRadius: BorderRadius.circular(50.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Upload Work Photo",
+                      style: GoogleFonts.outfit(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xffF2D701),
+                        letterSpacing: -0.3,
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 15.h),
+
+              // 👇 Image niche show hogi
+              if (_image.isNotEmpty)
+                Wrap(
+                  spacing: 12.w,
+                  runSpacing: 12.h,
+                  children: List.generate(_image.length, (index) {
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.r),
+                          child: Image.file(
+                            _image[index],
+                            width: 150.w,
+                            height: 200.h,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+
+                        // ❌ Remove Image
+                        Positioned(
+                          top: -10.h,
+                          right: -10.w,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _image.removeAt(index);
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(6.r),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 20.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              SizedBox(height: 10.h),
               InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    CupertinoPageRoute(
                       builder: (context) => Completejobscreen(),
                     ),
                   );

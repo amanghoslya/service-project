@@ -1,21 +1,32 @@
 import 'dart:async';
-
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/core/utils/showMessage.dart';
+import 'package:dwelleasy_ghana/screen/loginScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
-class VerifyOtpScreen extends StatefulWidget {
-  const VerifyOtpScreen({super.key});
+class VerifyOtpScreen extends ConsumerStatefulWidget {
+  final String token;
+  final String email;
+  const VerifyOtpScreen({super.key, required this.token, required this.email});
 
   @override
-  State<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
+  ConsumerState<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
 }
 
-class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
+class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
+  final otpController = GlobalKey<OtpPinFieldState>();
+  final passwordController = TextEditingController();
+  final confirmpasswordController = TextEditingController();
   static const int totalSeconds = 30;
+  String otp = "";
+  late String currentToken;
 
   int remainingSeconds = totalSeconds;
   Timer? timer;
@@ -23,6 +34,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   @override
   void initState() {
     super.initState();
+    currentToken = widget.token;
     startTimer();
   }
 
@@ -49,6 +61,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     timer?.cancel();
     super.dispose();
   }
+
+  bool isPasswordHide = true;
+  bool isConfirmPasswordHide = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,116 +107,304 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 60.h),
-            Container(
-              width: 49.w,
-              height: 49.h,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.buttonBg,
-              ),
-              child: Center(child: Image.asset("assets/lock.png")),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Enter OTP",
-              style: GoogleFonts.inter(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFFFFFFFF),
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Enter a 4 digit code sent to Ju***@example.com",
-              style: GoogleFonts.inter(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF8D8D8D),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 50.h),
-            OtpPinField(
-              cursorColor: Colors.white,
-              fieldWidth: 80.w,
-              fieldHeight: 60.h,
-              otpPinFieldDecoration:
-                  OtpPinFieldDecoration.defaultPinBoxDecoration,
-              otpPinFieldStyle: OtpPinFieldStyle(
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 60.h),
+              Container(
+                width: 49.w,
+                height: 49.h,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.buttonBg,
                 ),
-                activeFieldBackgroundColor: AppColors.cardBg,
-                activeFieldBorderColor: Color.fromARGB(127, 255, 255, 255),
-                defaultFieldBackgroundColor: Colors.transparent,
-                defaultFieldBorderColor: Color.fromARGB(30, 255, 255, 255),
-                filledFieldBackgroundColor: AppColors.cardBg,
+                child: Center(child: Image.asset("assets/lock.png")),
               ),
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              maxLength: 4,
-              onSubmit: (text) {},
-              onChange: (text) {},
-            ),
-            Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(3398.w, 53.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100.r),
-                  side: BorderSide.none,
-                ),
-                backgroundColor: AppColors.buttonBg,
-              ),
-              onPressed: () {},
-              child: Text(
-                "Next",
-                style: GoogleFonts.outfit(
-                  fontSize: 14.sp,
+              SizedBox(height: 8.h),
+              Text(
+                "Enter OTP",
+                style: GoogleFonts.inter(
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.buttonText,
+                  color: Color(0xFFFFFFFF),
                 ),
               ),
-            ),
-            SizedBox(height: 20.h),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Don't receive the code? ",
-                    style: GoogleFonts.parkinsans(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFFFFFFFF),
-                    ),
-                  ),
-                  TextSpan(
-                    text: "Resend",
-                    style: GoogleFonts.parkinsans(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.buttonBg,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.buttonBg,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        startTimer();
-                      },
-                  ),
-                ],
+              SizedBox(height: 8.h),
+              Text(
+                "Enter a 6 digit code sent to ${widget.email}",
+                style: GoogleFonts.inter(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF8D8D8D),
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(height: 20.h),
-          ],
+              SizedBox(height: 50.h),
+              OtpPinField(
+                key: otpController,
+                cursorColor: Colors.white,
+                fieldWidth: 60.w,
+                fieldHeight: 60.h,
+                otpPinFieldDecoration:
+                    OtpPinFieldDecoration.defaultPinBoxDecoration,
+                otpPinFieldStyle: OtpPinFieldStyle(
+                  fieldPadding: 0,
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  activeFieldBackgroundColor: AppColors.cardBg,
+                  activeFieldBorderColor: Color.fromARGB(127, 255, 255, 255),
+                  defaultFieldBackgroundColor: Colors.transparent,
+                  defaultFieldBorderColor: Color.fromARGB(30, 255, 255, 255),
+                  filledFieldBackgroundColor: AppColors.cardBg,
+                ),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                maxLength: 6,
+                onSubmit: (text) {},
+                onChange: (v) {
+                  setState(() {
+                    otp = v;
+                  });
+                },
+              ),
+              SizedBox(height: 16.h),
+              _inputForm(
+                label: "Password",
+                hintText: "**************",
+                controller: passwordController,
+                type: TextInputType.visiblePassword,
+                obscureText: true,
+                isHidden: isPasswordHide,
+                onTap: () {
+                  setState(() {
+                    isPasswordHide = !isPasswordHide;
+                  });
+                },
+              ),
+              SizedBox(height: 16.h),
+              _inputForm(
+                label: "Confirm Password",
+                hintText: "**************",
+                controller: confirmpasswordController,
+                type: TextInputType.visiblePassword,
+                obscureText: true,
+                isHidden: isConfirmPasswordHide,
+                onTap: () {
+                  setState(() {
+                    isConfirmPasswordHide = !isConfirmPasswordHide;
+                  });
+                },
+              ),
+              SizedBox(height: 50.h),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(3398.w, 53.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100.r),
+                    side: BorderSide.none,
+                  ),
+                  backgroundColor: AppColors.buttonBg,
+                ),
+                onPressed: () async {
+                  if (passwordController.text.trim() !=
+                      confirmpasswordController.text.trim()) {
+                    showErrorMessage(
+                      context: context,
+                      message: "Password and Confirm Password do not match",
+                    );
+                    return;
+                  }
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    final verifyService = ref.read(authServiceProvider);
+                    final isSucess = await verifyService.verifyOrCreatePassword(
+                      token: currentToken,
+                      otp: otp,
+                      password: passwordController.text.trim(),
+                      confirmpassword: confirmpasswordController.text.trim(),
+                      context: context,
+                    );
+
+                    if (isSucess) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        CupertinoPageRoute(builder: (context) => Loginscreen()),
+                        (route) => false,
+                      );
+                    } else {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      passwordController.clear();
+                      confirmpasswordController.clear();
+                      setState(() {
+                        otp = "";
+                      });
+                      otpController.currentState?.clearOtp();
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                },
+                child: isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: AppColors.buttonText,
+                          strokeWidth: 2.w,
+                        ),
+                      )
+                    : Text(
+                        "Update",
+                        style: GoogleFonts.outfit(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
+              ),
+              SizedBox(height: 20.h),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Don't receive the code? ",
+                      style: GoogleFonts.parkinsans(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFFFFFFFF),
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Resend",
+                      style: GoogleFonts.parkinsans(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.buttonBg,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.buttonBg,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            final resendService = ref.read(authServiceProvider);
+                            final response = await resendService.resendPassword(
+                              email: widget.email,
+                              context: context,
+                            );
+                            if (response!.code == 0 &&
+                                response.error == false) {
+                              setState(() {
+                                currentToken = response.data?.token ?? "";
+                                isLoading = false;
+                              });
+                              startTimer();
+                              showSuccessMessage(
+                                context: context,
+                                message: "OTP Resent Successfully",
+                              );
+                            }
+                          } catch (e) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          } finally {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.h),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _inputForm({
+    required String label,
+    required String hintText,
+    required TextEditingController controller,
+    required TextInputType type,
+    required bool obscureText,
+    required bool isHidden,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      padding: EdgeInsets.only(
+        left: 12.w,
+        right: 12.w,
+        top: 12.h,
+        bottom: 10.h,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.r),
+        color: AppColors.cardBg,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.outfit(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFFFFFFFF),
+            ),
+          ),
+          TextFormField(
+            obscureText: obscureText ? isHidden : false,
+            keyboardType: type,
+            controller: controller,
+            cursorColor: Colors.white,
+            style: TextStyle(color: Colors.white),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 12.h),
+              border: InputBorder.none,
+              hint: Text(
+                hintText,
+                style: GoogleFonts.parkinsans(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(127, 255, 255, 255),
+                ),
+              ),
+              suffixIcon: obscureText
+                  ? IconButton(
+                      onPressed: onTap,
+                      icon: Icon(
+                        isHidden ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.white,
+                        size: 20.sp,
+                      ),
+                    )
+                  : null,
+            ),
+          ),
+        ],
       ),
     );
   }

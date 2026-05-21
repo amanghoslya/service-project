@@ -1,20 +1,31 @@
+import 'dart:developer';
 import 'dart:io';
-
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/data/provider/getProfileProvider.dart';
+import 'package:dwelleasy_ghana/data/provider/getServiceProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Editprofilescreen extends StatefulWidget {
+class Editprofilescreen extends ConsumerStatefulWidget {
   const Editprofilescreen({super.key});
 
   @override
-  State<Editprofilescreen> createState() => _EditprofilescreenState();
+  ConsumerState<Editprofilescreen> createState() => _EditprofilescreenState();
 }
 
-class _EditprofilescreenState extends State<Editprofilescreen> {
+class _EditprofilescreenState extends ConsumerState<Editprofilescreen> {
+  final fullNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final experienceController = TextEditingController();
+  final cityController = TextEditingController();
+  final availabilityController = TextEditingController();
+  final addressController = TextEditingController();
   List<String> serviceList = [
     "AC Repair",
     "Cleaning",
@@ -38,65 +49,76 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
   ];
   String? selectedAvailabity;
   String? selectedService;
-  File? _image;
+  File? profileImage;
+  String existingImage = "";
 
-  final ImagePicker picker = ImagePicker();
-  Future<void> getImageFromGallery() async {
-    final XFile? pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
+  final ImagePicker _picker = ImagePicker();
+
+  /// Pick image (Camera / Gallery)
+  Future<void> pickImage(ImageSource source) async {
+    final XFile? pickedFile = await _picker.pickImage(
+      source: source,
+      imageQuality: 70,
     );
 
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
+        profileImage = File(pickedFile.path);
       });
     }
   }
 
-  Future<void> getImageFromCamera() async {
-    final XFile? pickedFile = await picker.pickImage(
-      source: ImageSource.camera,
-    );
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future showImage() async {
+  void showImagePicker() {
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              getImageFromGallery();
-            },
-            child: Text("Gallery"),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-              getImageFromCamera();
-            },
-            child: Text("Camera"),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text("Cancel"),
-        ),
-      ),
+      builder: (context) {
+        return CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.camera);
+              },
+              child: const Text("Camera"),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.gallery);
+              },
+              child: const Text("Gallery"),
+            ),
+          ],
+        );
+      },
     );
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadProfileData();
+  }
+
+  void loadProfileData() async {
+    final profile = ref.read(getProfileProvider);
+    final profileData = profile.value?.data;
+    fullNameController.text = profileData?.fullName ?? "";
+    phoneController.text = profileData?.phone ?? "";
+    emailController.text = profileData?.email ?? "";
+    experienceController.text = profileData?.experience ?? "";
+    cityController.text = profileData?.city ?? "";
+    selectedService = profileData?.serviceId?.id;
+    selectedAvailabity = profileData?.availability ?? "";
+    addressController.text = profileData?.address ?? "";
+    existingImage = profileData?.image ?? "";
+  }
+
+  bool isUpdateLoading = false;
+  @override
   Widget build(BuildContext context) {
+    final serviceState = ref.watch(getServiceProvider);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SingleChildScrollView(
@@ -106,7 +128,7 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 214.h,
+                  height: 210.h,
                   decoration: BoxDecoration(color: AppColors.buttonBg),
                 ),
                 Positioned(
@@ -153,35 +175,51 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: -55.h,
-                  child: GestureDetector(
-                    onTap: () {
-                      showImage();
-                    },
-                    child: Container(
-                      height: 110.h,
-                      width: 110.w,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Color(0xff04254E), width: 2),
-                      ),
-                      child: Center(
-                        child: ClipOval(
-                          child: _image != null
-                              ? Image.file(
-                                  _image!,
-                                  fit: BoxFit.fill,
-                                  width: 110.w,
-                                  height: 110.h,
-                                )
-                              : Center(
-                                  child: Icon(
-                                    Icons.image,
-                                    color: Color(0xff323232),
-                                    size: 54.sp,
-                                  ),
-                                ),
+                  bottom: -50.h,
+                  child: Center(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        showImagePicker();
+                      },
+                      child: Container(
+                        height: 110.h,
+                        width: 110.w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xff04254E),
+                            width: 3.w,
+                          ),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                            child: ClipOval(
+                              child: profileImage != null
+                                  ? Image.file(
+                                      profileImage!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    )
+                                  : existingImage.isNotEmpty
+                                  ? Image.network(
+                                      existingImage,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    )
+                                  : Center(
+                                      child: Icon(
+                                        Icons.image,
+                                        color: const Color(0xff323232),
+                                        size: 54.sp,
+                                      ),
+                                    ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -189,7 +227,7 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                 ),
               ],
             ),
-            SizedBox(height: 70.h),
+            SizedBox(height: 60.h),
             Center(
               child: Text(
                 "Upload Photo",
@@ -211,6 +249,7 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                     hintText: "Jelani",
                     text: "Full Name",
                     keyBord: TextInputType.name,
+                    controller: fullNameController,
                   ),
                   SizedBox(height: 14.h),
                   _register(
@@ -218,24 +257,28 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                     text: "Phone Number",
                     keyBord: TextInputType.number,
                     length: 10,
+                    controller: phoneController,
                   ),
                   SizedBox(height: 14.h),
                   _register(
                     hintText: "Jelani@example.com",
                     text: "Email",
                     keyBord: TextInputType.emailAddress,
+                    controller: emailController,
                   ),
                   SizedBox(height: 14.h),
                   _register(
                     hintText: "Thema",
                     text: "Experience",
                     keyBord: TextInputType.name,
+                    controller: experienceController,
                   ),
                   SizedBox(height: 14.h),
                   _register(
                     hintText: "Thema",
                     text: "City",
                     keyBord: TextInputType.streetAddress,
+                    controller: cityController,
                   ),
                   SizedBox(height: 14.h),
                   Text(
@@ -248,74 +291,86 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color.fromRGBO(255, 255, 255, 0.5),
-                      ),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: selectedService,
-                        isExpanded: true,
-                        dropdownColor: AppColors.scaffoldBg,
-                        icon: Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          size: 25.sp,
-                          color: AppColors.buttonBg,
-                        ),
-                        hint: Padding(
-                          padding: EdgeInsets.only(left: 8.w),
-                          child: Text(
-                            "Select Service",
-                            style: GoogleFonts.parkinsans(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(255, 255, 255, 0.5),
-                            ),
+                  serviceState.when(
+                    data: (data) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color.fromRGBO(255, 255, 255, 0.5),
                           ),
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
-                        style: GoogleFonts.outfit(
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-
-                        selectedItemBuilder: (context) {
-                          return serviceList.map((item) {
-                            return Padding(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            // value: selectedService,
+                            value:
+                                data.data?.any(
+                                      (e) => e.id == selectedService,
+                                    ) ==
+                                    true
+                                ? selectedService
+                                : null,
+                            isExpanded: true,
+                            dropdownColor: AppColors.scaffoldBg,
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              size: 25.sp,
+                              color: AppColors.buttonBg,
+                            ),
+                            hint: Padding(
                               padding: EdgeInsets.only(left: 8.w),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  item,
-                                  style: GoogleFonts.outfit(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.sp,
-                                  ),
+                              child: Text(
+                                "Select Service",
+                                style: GoogleFonts.parkinsans(
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromRGBO(255, 255, 255, 0.5),
                                 ),
                               ),
-                            );
-                          }).toList();
-                        },
-
-                        items: serviceList.map((item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 8.w),
-                              child: Text(item),
                             ),
-                          );
-                        }).toList(),
+                            style: GoogleFonts.outfit(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
 
-                        onChanged: (value) {
-                          setState(() {
-                            selectedService = value;
-                          });
-                        },
+                            items: data.data?.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item.id,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8.w),
+                                  child: Text(item.name ?? ""),
+                                ),
+                              );
+                            }).toList(),
+
+                            onChanged: (value) {
+                              setState(() {
+                                selectedService = value;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      return Center(
+                        child: Text(
+                          error.toString(),
+                          style: GoogleFonts.inter(color: Colors.white),
+                        ),
+                      );
+                    },
+                    loading: () => Center(
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.buttonBg,
+                            strokeWidth: 2,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -340,7 +395,10 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: selectedAvailabity,
+                        // value: selectedAvailabity,
+                        value: availabilityList.contains(selectedAvailabity)
+                            ? selectedAvailabity
+                            : null,
                         isExpanded: true,
                         dropdownColor: AppColors.scaffoldBg,
                         icon: Icon(
@@ -363,24 +421,7 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                           fontWeight: FontWeight.w400,
                           color: Colors.white,
                         ),
-                        selectedItemBuilder: (context) {
-                          return availabilityList.map((item) {
-                            return Padding(
-                              padding: EdgeInsets.only(left: 8.w),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  item,
-                                  style: GoogleFonts.outfit(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.sp,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList();
-                        },
+
                         items: availabilityList.map((item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -414,6 +455,7 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: TextField(
+                      controller: addressController,
                       maxLines: 5,
                       style: GoogleFonts.parkinsans(
                         color: Colors.white, // typed text white
@@ -460,15 +502,55 @@ class _EditprofilescreenState extends State<Editprofilescreen> {
                         backgroundColor: Color(0xffF2D701),
                         minimumSize: Size(double.infinity, 54.h),
                       ),
-                      onPressed: () {},
-                      child: Text(
-                        "Save",
-                        style: GoogleFonts.outfit(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xff04254E),
-                        ),
-                      ),
+                      onPressed: () async {
+                        setState(() {
+                          isUpdateLoading = true;
+                        });
+                        try {
+                          final updateService = ref.read(authServiceProvider);
+                          final response = await updateService.updateProfile(
+                            uploadImage: profileImage,
+                            fullName: fullNameController.text.trim(),
+                            phone: phoneController.text.trim(),
+                            city: cityController.text.trim(),
+                            address: addressController.text.trim(),
+                            experience: experienceController.text.trim(),
+                            availability: selectedAvailabity!,
+                            serviceId: selectedService!,
+                            context: context,
+                          );
+                          if (response?.code == 0 && response?.error == false) {
+                            ref.invalidate(getProfileProvider);
+                            Navigator.pop(context);
+                          }
+                        } catch (e, st) {
+                          log(e.toString());
+                          log(st.toString());
+                        } finally {
+                          setState(() {
+                            isUpdateLoading = false;
+                          });
+                        }
+                      },
+                      child: isUpdateLoading
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.h,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.buttonText,
+                                  strokeWidth: 2.w,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              "Save",
+                              style: GoogleFonts.outfit(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff04254E),
+                              ),
+                            ),
                     ),
                   ),
                   SizedBox(height: 50.h),
@@ -487,6 +569,7 @@ Widget _register({
   required String text,
   required TextInputType keyBord,
   int? length,
+  required TextEditingController controller,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -505,12 +588,10 @@ Widget _register({
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
         child: TextField(
           keyboardType: keyBord,
-          style: GoogleFonts.parkinsans(
-            color: Colors.white, // typed text white
-            fontSize: 14.sp,
-          ),
+          style: GoogleFonts.parkinsans(color: Colors.white, fontSize: 14.sp),
           maxLength: length,
           cursorColor: Colors.white,
+          controller: controller,
           decoration: InputDecoration(
             counterText: "",
             hintText: hintText,
@@ -526,14 +607,7 @@ Widget _register({
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(
-                color: Color.fromRGBO(
-                  255,
-                  255,
-                  255,
-                  0.6,
-                ), // same border on focus
-              ),
+              borderSide: BorderSide(color: Color.fromRGBO(255, 255, 255, 0.6)),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
