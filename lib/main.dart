@@ -60,8 +60,8 @@ class MyApp extends StatelessWidget {
               // tested with just a hot reload.
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            home: token == null ? WelComeScreen() : MyBottomNav(),
-            // home: Clientwelcome(),
+            // home: token == null ? WelComeScreen() : MyBottomNav(),
+            home: Clientwelcome(),
           ),
         );
       },

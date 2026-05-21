@@ -1,3 +1,4 @@
+import 'package:dwelleasy_ghana/clientScreen.dart/OurPlans/ClientPaymentScreen.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,55 +12,48 @@ class Clientoursignupscreen extends StatefulWidget {
 }
 
 class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
+  TextEditingController dateController = TextEditingController();
   List<String> bedroomList = [
-    "Tier-1 (1–2 Bedrooms)",
-    "Tier-2 (3–4 Bedrooms)",
-    "Tier-3 (5+ Bedrooms)",
+    "1-2",
+    "3-4"
+        "5+",
   ];
-  List<String> bathroomList = [
-    "1 Bathroom",
-    "2 Bathrooms",
-    "3 Bathrooms",
-    "4 Bathrooms",
-    "5+ Bathrooms",
-  ];
-  List<String> acList = [
-    "1 AC Unit",
-    "2 AC Units",
-    "3 AC Units",
-    "4 AC Units",
-    "5+ AC Units",
-  ];
+  List<String> bathroomList = ["1", "2", "3+"];
+  List<String> acList = ["0", "1-2", "3-4", "5+"];
   List<String> propertyTypeList = [
+    "Detached house",
+    "Semi-detached",
     "Apartment",
-    "House",
-    "Villa",
-    "Studio",
     "Townhouse",
-    "Duplex",
-    "Penthouse",
   ];
   List<String> propertyAgeList = [
-    "0 - 1 Year",
-    "1 - 3 Years",
-    "3 - 5 Years",
-    "5 - 10 Years",
-    "10 - 15 Years",
-    "15+ Years",
+    "Less than 5 years",
+    "5-15 years",
+    "More than15 years",
   ];
-  List<String> planTypeList = ["Plumber", "Electrician", "AC Technician"];
+  List<String> planTypeList = [
+    "Plumbing only",
+    "Electrical only",
+    "Plumbing + Electrical",
+    "Full Bundle(including AC)",
+  ];
   List<String> planTypeList2 = [
     "Basic - 2 Call Out / Year",
-    "Standard - 4 Call Out / Year",
-    "Premium - 6 Call Out / Year",
-    "Gold - 12 Call Out / Year",
+    "Prmium(Unlimited call-outs)",
   ];
   List<String> paymentmethordList = [
-    "Credit Card",
-    "Debit Card",
+    "Mobile Money(MTM)",
+    "Mobile Money(Vodafone)",
+    "Mobile Money(AirtelTigo)",
     "Bank Transfer",
-    "Cash",
-    "Mobile Money",
+    "Cash(office only)",
+  ];
+  List<String> facebookList = [
+    "Facebook",
+    "Instagram",
+    "Friend",
+    "Real Estate Agent",
+    "Other",
   ];
   String? selectBedroom;
   String? selectBathroom;
@@ -68,6 +62,9 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
   String? selectPropertyAge;
   String? selectPlanType;
   String? selectPlanType2;
+  String? selectfacebook;
+
+  int selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +334,124 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
                 keybordtype: TextInputType.number,
                 icon: Icon(Icons.date_range, color: AppColors.buttonText),
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 16.h),
+              chooseYourPlan(
+                listname: facebookList,
+                selectname: selectfacebook,
+                onChanged: (value) {
+                  setState(() {
+                    selectfacebook = value;
+                  });
+                },
+                hintText: "Facebook",
+                text: "How did you hear about us?",
+              ),
+              SizedBox(height: 16.h),
+              Text(
+                "Section E: Declaration",
+                style: GoogleFonts.outfit(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.buttonText,
+                  letterSpacing: -0.3,
+                ),
+              ),
+              SizedBox(height: 16.h),
+              customCheckBox("I confirm all information is accurate", 0),
+              customCheckBox("Planage starts after 14 days", 1),
+              customCheckBox("I agree to Terms & Conditions", 2),
+              customCheckBox(" No pre-existing faults", 3),
+              SizedBox(height: 16.h),
+              personalInformation(
+                text: "Electronic Signature",
+                hinttext: "Type your Name",
+                keybordtype: TextInputType.name,
+              ),
+              SizedBox(height: 16.h),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Date",
+                    style: GoogleFonts.outfit(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff777676),
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextField(
+                    controller: dateController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      hintText: "dd-mm-yy",
+                      suffixIcon: InkWell(
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+
+                          if (pickedDate != null) {
+                            dateController.text =
+                                "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+                          }
+                        },
+                        child: Icon(
+                          Icons.date_range,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(color: AppColors.buttonText),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(color: AppColors.buttonText),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(color: AppColors.buttonText),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+              SizedBox(
+                width: double.infinity,
+                height: 48.h,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.buttonBg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(100.r),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Clientpaymentscreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "Submit Application",
+                    style: GoogleFonts.outfit(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.buttonText,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 30.h),
             ],
           ),
         ),
@@ -372,6 +486,7 @@ Widget personalInformation({
         cursorColor: Colors.black,
         cursorHeight: 17,
         decoration: InputDecoration(
+          isDense: true,
           suffixIcon: icon,
           counterText: "",
           border: OutlineInputBorder(
@@ -535,5 +650,40 @@ Widget chooseYourPlan({
         ),
       ),
     ],
+  );
+}
+
+bool isCheck = false;
+
+Widget customCheckBox(String title, int index) {
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: GoogleFonts.outfit(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xffA3A3A3),
+              ),
+            ),
+          ),
+          Checkbox(
+            value: isCheck,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+            onChanged: (value) {
+              setState(() {
+                isCheck = value!;
+              });
+            },
+          ),
+          SizedBox(width: 100.w),
+        ],
+      );
+    },
   );
 }

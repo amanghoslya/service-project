@@ -91,6 +91,8 @@ class AuthService {
     }
   }
 
+  
+
   Future<GetProfileModel> getProfile() async {
     try {
       final response = await api.getProfile();

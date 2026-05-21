@@ -1,0 +1,396 @@
+import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/screen/loginScreen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class Clientpaymentscreen extends StatefulWidget {
+  const Clientpaymentscreen({super.key});
+
+  @override
+  State<Clientpaymentscreen> createState() => _ClientpaymentscreenState();
+}
+
+class _ClientpaymentscreenState extends State<Clientpaymentscreen> {
+  String? selectedPayment;
+
+  List<String> paymentList = [
+    "Mobile Money (MTN)",
+    "Mobile Money (Vodafone)",
+    "Mobile Money (Airteltigo)",
+    "Bank Transfer",
+    "Cash (Office Only)",
+  ];
+  void showPaymentDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 50.h,
+              bottom: 49.h,
+              left: 33.w,
+              right: 33.w,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 66.h,
+                  width: 66.w,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(108, 226, 39, 0.31),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.done,
+                      color: Color(0xff6CE227),
+                      size: 35.sp,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  "Payment Successful",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.outfit(
+                    fontSize: 29.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.buttonText,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  "Your payment has been completed successfully.",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.parkinsans(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.buttonText,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  "GHS 149",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.outfit(
+                    fontSize: 29.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff46BE00),
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.buttonBg,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100.r),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Continue",
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.buttonText,
+                        fontSize: 18.sp,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroungBg,
+      appBar: AppBar(
+        backgroundColor: AppColors.backgroungBg,
+        centerTitle: true,
+
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            height: 44.h,
+            width: 44.w,
+            padding: EdgeInsets.only(left: 5.w),
+            margin: EdgeInsets.only(left: 16.w),
+            decoration: BoxDecoration(
+              color: AppColors.buttonText,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.buttonBg,
+                size: 15.sp,
+              ),
+            ),
+          ),
+        ),
+
+        title: Column(
+          children: [
+            Text(
+              "Payment",
+              style: GoogleFonts.outfit(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: Color(0xff000000),
+                letterSpacing: -0.3,
+              ),
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              "Tell us why you are unable to complete\n payment",
+              style: GoogleFonts.parkinsans(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w500,
+                color: Color(0xff000000),
+                letterSpacing: -0.3,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(left: 16.w, right: 16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 25.h),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 15.w, top: 17.h),
+              decoration: BoxDecoration(
+                color: Color(0xffFFFFFF),
+                borderRadius: BorderRadius.circular(10.r),
+                border: Border(
+                  left: BorderSide(color: AppColors.buttonBg, width: 2),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Basic Plan",
+                    style: GoogleFonts.parkinsans(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: -0.3,
+                      color: AppColors.buttonText,
+                    ),
+                  ),
+                  SizedBox(height: 13.h),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Service: ",
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 12.sp,
+                            color: AppColors.buttonText,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Sign Up",
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 12.sp,
+                            color: AppColors.buttonText,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Engineer:",
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 12.sp,
+                            color: AppColors.buttonText,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: " Dakarai",
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 12.sp,
+                            color: AppColors.buttonText,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Date: ",
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 12.sp,
+                            color: AppColors.buttonText,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextSpan(
+                          text: " 15 Apr 2025",
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 12.sp,
+                            color: AppColors.buttonText,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 23.h),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "GHS 149",
+                      style: GoogleFonts.parkinsans(
+                        fontSize: 20.h,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.buttonText,
+                        letterSpacing: -0.3,
+                      ),
+                      // textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 18.h),
+                ],
+              ),
+            ),
+            SizedBox(height: 43),
+            Text(
+              "Select Payment Method",
+              style: GoogleFonts.outfit(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.buttonText,
+                letterSpacing: -0.3,
+              ),
+            ),
+            SizedBox(height: 22.h),
+            Container(
+              padding: EdgeInsets.only(left: 16.w, right: 25.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                color: const Color.fromRGBO(242, 215, 1, 0.16),
+                border: Border.all(color: AppColors.buttonBg),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedPayment,
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(10.r),
+                  dropdownColor: const Color(0xFFFDF6C8),
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.buttonText,
+                    size: 25.sp,
+                  ),
+                  hint: Padding(
+                    padding: EdgeInsets.only(left: 8.w),
+                    child: Text(
+                      "Select Payment",
+                      style: GoogleFonts.parkinsans(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.buttonText,
+                      ),
+                    ),
+                  ),
+                  style: GoogleFonts.outfit(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.buttonText,
+                  ),
+                  items: paymentList.map((item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 8.w),
+                        child: Text(
+                          item,
+                          style: GoogleFonts.outfit(
+                            fontSize: 14.sp,
+                            color: AppColors.buttonText,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedPayment = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 39.h),
+            SizedBox(
+              width: double.infinity,
+              height: 48.h,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.buttonBg,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(100.r),
+                  ),
+                ),
+                onPressed: () {
+                  showPaymentDialog();
+                },
+                child: Text(
+                  "Pay Now",
+                  style: GoogleFonts.outfit(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: -0.3,
+                    color: AppColors.buttonText,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
