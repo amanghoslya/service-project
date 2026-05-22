@@ -278,7 +278,7 @@ class _ClienthomescreenState extends State<Clienthomescreen> {
                         ),
                         SizedBox(height: 6.h),
                         Text(
-                          "2 call-outs per year (perfect for newer homes)",
+                          "2 call-outs per year(perfect for newer homes)",
                           style: GoogleFonts.parkinsans(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
@@ -320,7 +320,7 @@ class _ClienthomescreenState extends State<Clienthomescreen> {
                         ),
                         SizedBox(height: 6.h),
                         Text(
-                          "Unlimited call-outs (total peace of mind)",
+                          "Unlimited call-outs(total peace of mind)",
                           style: GoogleFonts.parkinsans(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
