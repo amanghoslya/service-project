@@ -35,7 +35,7 @@ class _ClientourplandetilesscreenState
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 51.h),
+            SizedBox(height: 26.h),
             Padding(
               padding: EdgeInsets.only(left: 16.w, right: 16.w),
               child: Row(
