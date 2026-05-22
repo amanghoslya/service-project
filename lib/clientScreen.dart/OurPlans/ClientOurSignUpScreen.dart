@@ -13,11 +13,7 @@ class Clientoursignupscreen extends StatefulWidget {
 
 class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
   TextEditingController dateController = TextEditingController();
-  List<String> bedroomList = [
-    "1-2",
-    "3-4"
-        "5+",
-  ];
+  List<String> bedroomList = ["1-2", "3-4", "5+"];
   List<String> bathroomList = ["1", "2", "3+"];
   List<String> acList = ["0", "1-2", "3-4", "5+"];
   List<String> propertyTypeList = [
@@ -63,7 +59,6 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
   String? selectPlanType;
   String? selectPlanType2;
   String? selectfacebook;
-
   int selectedIndex = -1;
 
   @override
@@ -73,7 +68,6 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
       appBar: AppBar(
         backgroundColor: AppColors.backgroungBg,
         centerTitle: true,
-
         leading: Center(
           child: GestureDetector(
             onTap: () {
@@ -98,7 +92,6 @@ class _ClientoursignupscreenState extends State<Clientoursignupscreen> {
             ),
           ),
         ),
-
         title: Column(
           children: [
             Text(

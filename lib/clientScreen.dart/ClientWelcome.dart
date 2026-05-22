@@ -19,6 +19,7 @@ class _ClientwelcomeState extends State<Clientwelcome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroungBg,
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColors.backgroungBg),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,6 +100,7 @@ class _ClientwelcomeState extends State<Clientwelcome> {
                   borderRadius: BorderRadius.circular(100.r),
                   side: BorderSide.none,
                 ),
+                elevation: 0,
                 backgroundColor: AppColors.buttonBg,
               ),
               onPressed: () {

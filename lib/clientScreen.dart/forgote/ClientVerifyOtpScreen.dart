@@ -236,6 +236,7 @@ class _ClientverifyotpscreenState extends State<Clientverifyotpscreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100.r),
                     ),
+                    elevation: 0,
                   ),
                   onPressed: () {
                     Navigator.push(

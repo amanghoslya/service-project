@@ -16,6 +16,7 @@ class _ClientforgotescreenState extends State<Clientforgotescreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroungBg,
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColors.backgroungBg),
       body: Padding(
         padding: EdgeInsets.only(left: 16.w, right: 16.w),
         child: Center(
@@ -112,6 +113,7 @@ class _ClientforgotescreenState extends State<Clientforgotescreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadiusGeometry.circular(100.r),
                     ),
+                    elevation: 0,
                   ),
                   onPressed: () {
                     Navigator.push(
