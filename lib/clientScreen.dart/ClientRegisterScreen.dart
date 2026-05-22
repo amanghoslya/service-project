@@ -16,6 +16,7 @@ class _ClientregisterscreenState extends State<Clientregisterscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroungBg,
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColors.backgroungBg),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 16.w, right: 16.w),

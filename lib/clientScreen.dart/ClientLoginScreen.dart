@@ -17,6 +17,7 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroungBg,
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColors.backgroungBg),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 16.w, right: 16.w),
@@ -97,6 +98,7 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusGeometry.circular(100.r),
                       ),
+                      elevation: 0,
                     ),
                     onPressed: () {
                       Navigator.push(

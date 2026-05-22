@@ -31,6 +31,7 @@ class _ClientourplandetilesscreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroungBg,
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColors.backgroungBg),
       body: SingleChildScrollView(
         child: Column(
           children: [

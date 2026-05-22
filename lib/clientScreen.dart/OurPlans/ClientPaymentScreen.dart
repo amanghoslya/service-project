@@ -132,24 +132,26 @@ class _ClientpaymentscreenState extends State<Clientpaymentscreen> {
         backgroundColor: AppColors.backgroungBg,
         centerTitle: true,
 
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            height: 44.h,
-            width: 44.w,
-            padding: EdgeInsets.only(left: 5.w),
-            margin: EdgeInsets.only(left: 16.w),
-            decoration: BoxDecoration(
-              color: AppColors.buttonText,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.buttonBg,
-                size: 15.sp,
+        leading: Center(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 44.h,
+              width: 44.w,
+              padding: EdgeInsets.only(left: 5.w),
+              margin: EdgeInsets.only(left: 16.w),
+              decoration: BoxDecoration(
+                color: AppColors.buttonText,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.buttonBg,
+                  size: 15.sp,
+                ),
               ),
             ),
           ),
