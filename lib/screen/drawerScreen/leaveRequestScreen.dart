@@ -256,10 +256,7 @@ class _LeaverequestscreenState extends ConsumerState<Leaverequestscreen> {
                             );
 
                         if (response?.code == 0 && response?.error == false) {
-                          showSuccessMessage(
-                            message: response?.message ?? "",
-                            context: context,
-                          );
+                          showSuccessSnackBar(response?.message ?? "");
                           ref.invalidate(leaveRequestProvider);
                           Navigator.pushReplacement(
                             context,

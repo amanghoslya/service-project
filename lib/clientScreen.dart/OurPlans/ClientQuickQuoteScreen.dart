@@ -184,7 +184,7 @@ class _ClientquickquotescreenState extends State<Clientquickquotescreen> {
             ),
             SizedBox(height: 10.h),
             myDropdown(
-              listname: planList,
+              listname: planTypeList,
               selectname: selectedPlanType,
               hintText: "Basic (2 call-outs per year)",
               onChanged: (value) {
@@ -214,15 +214,15 @@ class _ClientquickquotescreenState extends State<Clientquickquotescreen> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Clientoursignupscreen(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => Clientoursignupscreen(),
+                  //   ),
+                  // );
                 },
                 child: Text(
-                  "Proceed to Sign Up",
+                  "Proceed",
                   style: GoogleFonts.outfit(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,

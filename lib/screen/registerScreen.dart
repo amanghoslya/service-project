@@ -400,7 +400,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       },
                       validator: (value) {
                         final error = validator(value);
-
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (context.mounted) {
                             setState(() {

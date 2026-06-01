@@ -316,10 +316,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
                                 isLoading = false;
                               });
                               startTimer();
-                              showSuccessMessage(
-                                context: context,
-                                message: "OTP Resent Successfully",
-                              );
+                              showSuccessSnackBar("OTP Resent Successfully");
                             }
                           } catch (e) {
                             setState(() {

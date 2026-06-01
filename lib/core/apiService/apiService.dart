@@ -2,13 +2,33 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dwelleasy_ghana/core/network/api.stateNetwork.dart';
 import 'package:dwelleasy_ghana/core/utils/showMessage.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CForgotPassBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CForgotPassResModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CGetPlanModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CLoginBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CProfileModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CRegisterBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CUpdateProfileBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CUpdateProfileResModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CVerifyOrCreatePassBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/CVerifyOrCreatePassResModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/clientCreateTicketBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/clientGetTicketModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/createPlanReqiestBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/createServiceRequestBodyModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/getMyPlanRequestServiceModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceDetailsModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceListModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/getServiceRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/createLeaveRequestBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/createLeaveRequestResModel.dart';
+import 'package:dwelleasy_ghana/data/model/createTicketBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/forgotPasswordBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/forgotPasswordResModel.dart';
 import 'package:dwelleasy_ghana/data/model/getMyLeaveModel.dart';
 import 'package:dwelleasy_ghana/data/model/getProfileModel.dart';
 import 'package:dwelleasy_ghana/data/model/getServiceResModel.dart';
+import 'package:dwelleasy_ghana/data/model/getTicketModel.dart';
 import 'package:dwelleasy_ghana/data/model/loginBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileBodyModel.dart';
@@ -49,7 +69,7 @@ class AuthService {
       final response = await api.loginEmployee(body);
       if (response.code == 0 && response.error == false) {
         log(response.message ?? "Login Success");
-        final box = Hive.box("userbox");
+        final box = Hive.box("employeeBox");
         await box.put("token", response.data?.token ?? "");
         await box.put("id", response.data?.id ?? "");
       }
@@ -91,8 +111,6 @@ class AuthService {
     }
   }
 
-  
-
   Future<GetProfileModel> getProfile() async {
     try {
       final response = await api.getProfile();
@@ -126,10 +144,6 @@ class AuthService {
         }
       }
 
-      // final uploadResponse = await api.uploadImage(uploadImage);
-      // if (uploadResponse.code == 0 && uploadResponse.error == false) {
-      //   imageUrl = uploadResponse.data?.imageUrl ?? "";
-      // }
       final body = UpdateProfileBodyModel(
         fullName: fullName,
         phone: phone,
@@ -183,10 +197,7 @@ class AuthService {
       final response = await api.verifyOrCreateNewPassword(body);
       if (response.code == 0 && response.error == false) {
         log(response.message ?? "Sucess");
-        showSuccessMessage(
-          context: context,
-          message: "Password Update Successfully",
-        );
+        showSuccessSnackBar("Password Update Successfully");
         return true;
       }
       return true;
@@ -236,6 +247,404 @@ class AuthService {
         return response;
       }
       return response;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> createTicket({
+    required String subject,
+    required String desc,
+  }) async {
+    try {
+      final body = CreateTicketBodyModel(subject: subject, description: desc);
+      final response = await api.createTicket(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Login Success");
+        showSuccessSnackBar(response.message ?? "Sucess");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("ERROR => $e");
+      log("STACK TRACE => $st");
+      return false;
+    }
+  }
+
+  Future<GetTicketModel> getTicket() async {
+    try {
+      final response = await api.getTicket();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  /////////////////////////////////  Client (User) //////////////////////////////
+  Future<bool> clientRegister({
+    required String fullName,
+    required String email,
+    required String phoneNumber,
+    required String password,
+    String? deviceId,
+    required BuildContext context,
+  }) async {
+    try {
+      final body = CRegisterBodyModel(
+        fullName: fullName,
+        email: email,
+        phone: phoneNumber,
+        password: password,
+        deviceId: deviceId,
+      );
+      final response = await api.clientRegister(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Success");
+        showSuccessSnackBar(response.message ?? "");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> clientLogin({
+    required String email,
+    required String password,
+    String? deviceId,
+  }) async {
+    try {
+      final body = CLoginBodyModel(
+        email: email,
+        password: password,
+        deviceId: deviceId,
+      );
+      final response = await api.clientLogin(body);
+      if (response.code == 0 && response.error == false) {
+        var box = Hive.box("clientBox");
+        await box.put("token", response.data!.token);
+        await box.put("id", response.data!.id);
+        log(response.message ?? "Success");
+        return true;
+      }
+      return false;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  Future<CForgotPasswordResModel> clientForgotPassword({
+    required String email,
+    required BuildContext context,
+  }) async {
+    try {
+      final body = CForgotPasswordBodyModel(email: email);
+      final response = await api.clientForgotPassword(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Success");
+        return response;
+      }
+      throw Exception(response.message ?? "Something went wrong");
+    } catch (e) {
+      log(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<CVerfiOrCreatePassResModel> clientVerifyOrCreatePassword({
+    required String token,
+    required String otp,
+    required String password,
+    required String confirmpassword,
+    required BuildContext context,
+  }) async {
+    try {
+      final body = CVerfiOrCreatePassBodyModel(
+        token: token,
+        otp: otp,
+        password: password,
+        confirmPassword: confirmpassword,
+      );
+      final response = await api.clientVerifyORCreatePassword(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Sucess");
+        showSuccessSnackBar("Password Update Successfully");
+        return response;
+      }
+      return throw Exception(response.message ?? "Error");
+    } catch (e, st) {
+      log(e.toString());
+      return throw Exception(e.toString());
+    }
+  }
+
+  Future<CForgotPasswordResModel> clientResendOTP({
+    required String email,
+    required BuildContext context,
+  }) async {
+    try {
+      final body = CForgotPasswordBodyModel(email: email);
+      final response = await api.clientForgotPassword(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Success");
+        return response;
+      }
+      throw Exception(response.message ?? "Something went wrong");
+    } catch (e) {
+      log(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<CProfileModel> clientGetProfile() async {
+    try {
+      final response = await api.clientProfile();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<CUpdateProfileResModel> clientUpdateProfile({
+    File? uploadImage,
+    required String fullName,
+    required String phone,
+    required String address,
+    String? existingImage,
+    required BuildContext context,
+  }) async {
+    try {
+      String imageUrl = existingImage ?? "";
+      if (uploadImage != null) {
+        final uploadResponse = await api.uploadImage(uploadImage);
+
+        if (uploadResponse.code == 0 && uploadResponse.error == false) {
+          imageUrl = uploadResponse.data?.imageUrl ?? imageUrl;
+        }
+      }
+      final body = CUpdateProfileBodyModel(
+        fullName: fullName,
+        phone: phone,
+        address: address,
+        image: imageUrl,
+      );
+      log("FINAL IMAGE URL => $imageUrl");
+      final profileResponse = await api.clientUpdateProfile(body);
+      if (profileResponse.code == 0 && profileResponse.error == false) {
+        return profileResponse;
+      }
+      return throw Exception(profileResponse.message);
+    } catch (e, st) {
+      log(e.toString());
+      return throw Exception(e.toString());
+    }
+  }
+
+  Future<CgetPlanModel> clientGetPlan() async {
+    try {
+      final response = await api.clientGetPlan();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<GetPlanServiceListModel> clientGetPlanService() async {
+    try {
+      final response = await api.clientGetPlanService();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<GetPlanServiceDetailsModel> clientGetPlanServiceDetails({
+    required String id,
+  }) async {
+    try {
+      final response = await api.clientGetPlanServiceDetails(id);
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> clientCreatePlanRequest({
+    required String fullName,
+    required String email,
+    required String phoneNumber,
+    required String alterNativePhoneNumber,
+    required String nationalId,
+    required String propertyAddress,
+    required String bedrooms,
+    required int bathrooms,
+    required int acUnits,
+    required String propertyType,
+    required String propertyAge,
+    required String serviceId,
+    required String planId,
+    required String paymentMethod1,
+    required String mobileMoneyNumber,
+    required int preferredBillingDate,
+    required String howDidYouHearAboutUs,
+    required bool informationAccurate,
+    required bool planStartsAfter14Days,
+    required bool agreeTermsAndConditions,
+    required bool noPreExistingFaults,
+    required String electronicSignature,
+
+    required String date,
+    required String paymentMethod,
+  }) async {
+    try {
+      final body = CreatePlanRequestBodyModel(
+        personalInformation: PersonalInformation(
+          fullName: fullName,
+          email: email,
+          phoneNumber: phoneNumber,
+          alternativePhoneNumber: alterNativePhoneNumber,
+          nationalId: nationalId,
+          propertyAddress: propertyAddress,
+        ),
+        propertyDetails: PropertyDetails(
+          bedrooms: bedrooms,
+          bathrooms: bathrooms,
+          acUnits: acUnits,
+          propertyType: propertyType,
+          propertyAge: propertyAge,
+        ),
+        planDetails: PlanDetails(serviceId: serviceId, planId: planId),
+        paymentAndBilling: PaymentAndBilling(
+          paymentMethod: paymentMethod1,
+          mobileMoneyNumber: mobileMoneyNumber,
+          preferredBillingDate: preferredBillingDate,
+          howDidYouHearAboutUs: howDidYouHearAboutUs,
+        ),
+        declaration: Declaration(
+          informationAccurate: informationAccurate,
+          planStartsAfter14Days: planStartsAfter14Days,
+          agreeTermsAndConditions: agreeTermsAndConditions,
+          noPreExistingFaults: noPreExistingFaults,
+          electronicSignature: electronicSignature,
+
+          date: date,
+        ),
+        paymentMethod: "cash",
+      );
+      log(body.toJson().toString());
+      final response = await api.clientCreatePlanRequest(body);
+
+      if (response.code == 0 && response.error == false) {
+        // log(response.message ?? "Plan Request Success");
+
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("CREATE PLAN REQUEST ERROR => $e");
+      log("STACK TRACE => $st");
+
+      return false;
+    }
+  }
+
+  Future<GetMyPlanRequestServiceModel> clientGetMyPlanRequestService() async {
+    try {
+      final response = await api.clientGetMyPlanRequestService();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> clientCreateSerivceRequest({
+    required String serviceId,
+    required String desc,
+    required int preffrerData,
+  }) async {
+    try {
+      final body = CreateServiceRequestBodyModel(
+        serviceId: serviceId,
+        description: desc,
+        preferredDate: preffrerData,
+      );
+      final response = await api.clientCreateSerivceRequest(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Login Success");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("ERROR => $e");
+      log("STACK TRACE => $st");
+      return false;
+    }
+  }
+
+  Future<GetServiceRequestModel> clientGetServiceRequest() async {
+    try {
+      final response = await api.clientGetServiceRequest();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> clientCreateTicket({
+    required String subject,
+    required String desc,
+  }) async {
+    try {
+      final body = ClientCreateTicketBodyModel(
+        subject: subject,
+        description: desc,
+      );
+      final response = await api.clientCreateTicket(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Login Success");
+        showSuccessSnackBar(response.message ?? "Sucess");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("ERROR => $e");
+      log("STACK TRACE => $st");
+      return false;
+    }
+  }
+
+  Future<ClientGetTicketModel> clientGetTicket() async {
+    try {
+      final response = await api.clientGetTicket();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
     } catch (e) {
       throw Exception(e.toString());
     }

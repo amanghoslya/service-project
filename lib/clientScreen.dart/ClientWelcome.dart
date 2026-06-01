@@ -23,7 +23,6 @@ class _ClientwelcomeState extends State<Clientwelcome> {
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 123.h),
             Image.asset(

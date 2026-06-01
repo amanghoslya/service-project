@@ -20,7 +20,7 @@ class UploadImageController
       final service = ApiStateNetwork(callDio());
       final response = await service.uploadImage(uploadImage);
       if (response.code == 0 && response.error == false) {
-        showSuccessMessage(context: context, message: response.message ?? "");
+        showSuccessSnackBar( response.message ?? "");
         state = AsyncValue.data(response);
           return true;
       } else {

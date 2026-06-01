@@ -1,17 +1,25 @@
+import 'dart:developer';
+
 import 'package:dwelleasy_ghana/clientScreen.dart/forgote/ClientVerifyOtpScreen.dart';
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Clientforgotescreen extends StatefulWidget {
+class Clientforgotescreen extends ConsumerStatefulWidget {
   const Clientforgotescreen({super.key});
 
   @override
-  State<Clientforgotescreen> createState() => _ClientforgotescreenState();
+  ConsumerState<Clientforgotescreen> createState() =>
+      _ClientforgotescreenState();
 }
 
-class _ClientforgotescreenState extends State<Clientforgotescreen> {
+class _ClientforgotescreenState extends ConsumerState<Clientforgotescreen> {
+  final emailController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +95,7 @@ class _ClientforgotescreenState extends State<Clientforgotescreen> {
                     ),
                     SizedBox(height: 10.h),
                     TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.zero,
                         border: InputBorder.none,
@@ -115,22 +124,58 @@ class _ClientforgotescreenState extends State<Clientforgotescreen> {
                     ),
                     elevation: 0,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Clientverifyotpscreen(),
-                      ),
-                    );
+                  onPressed: () async {
+                    if (emailController.text.trim().isEmpty) {
+                      return;
+                    }
+                    setState(() {
+                      isLoading = true;
+                    });
+                    try {
+                      final service = ref.read(authServiceProvider);
+                      final res = await service.clientForgotPassword(
+                        email: emailController.text.trim(),
+                        context: context,
+                      );
+                      if (res.code == 0 && res.error == false) {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Clientverifyotpscreen(
+                              token: res.data!.token!,
+                              email: emailController.text.trim(),
+                            ),
+                          ),
+                        );
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    } catch (e, st) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      log(e.toString());
+                      log(st.toString());
+                    }
                   },
-                  child: Text(
-                    "Reset",
-                    style: GoogleFonts.outfit(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.buttonText,
-                    ),
-                  ),
+                  child: isLoading
+                      ? SizedBox(
+                          width: 20.w,
+                          height: 20.h,
+                          child: CircularProgressIndicator(
+                            color: AppColors.buttonText,
+                            strokeWidth: 1.5,
+                          ),
+                        )
+                      : Text(
+                          "Reset",
+                          style: GoogleFonts.outfit(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.buttonText,
+                          ),
+                        ),
                 ),
               ),
             ],

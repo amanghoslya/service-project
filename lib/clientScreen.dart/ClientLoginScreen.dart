@@ -1,18 +1,26 @@
+import 'dart:developer';
 import 'package:dwelleasy_ghana/clientScreen.dart/ClientHomeScreen.dart';
 import 'package:dwelleasy_ghana/clientScreen.dart/forgote/ClientForgoteScreen.dart';
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Clientloginscreen extends StatefulWidget {
+class Clientloginscreen extends ConsumerStatefulWidget {
   const Clientloginscreen({super.key});
 
   @override
-  State<Clientloginscreen> createState() => _ClientloginscreenState();
+  ConsumerState<Clientloginscreen> createState() => _ClientloginscreenState();
 }
 
-class _ClientloginscreenState extends State<Clientloginscreen> {
+class _ClientloginscreenState extends ConsumerState<Clientloginscreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isPasswordHide = true;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,9 +72,20 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
                   ),
                 ),
                 SizedBox(height: 59.h),
-                _login(lable: "Email  / Phone", hint: "Kenny@example.com"),
+                _login(
+                  lable: "Email  / Phone",
+                  hint: "Kenny@example.com",
+                  controller: emailController,
+                  type: TextInputType.emailAddress,
+                ),
                 SizedBox(height: 16.h),
-                _login(lable: "Password", hint: "Enter Your Password"),
+                _login(
+                  lable: "Password",
+                  hint: "Enter Your Password",
+                  controller: passwordController,
+                  type: TextInputType.visiblePassword,
+                  obscureText: true,
+                ),
                 SizedBox(height: 10.h),
                 Align(
                   alignment: Alignment.centerRight,
@@ -100,22 +119,59 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
                       ),
                       elevation: 0,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ClientMyBottomNav(),
-                        ),
-                      );
+                    onPressed: () async {
+                      if (emailController.text.trim().isEmpty) {
+                        return;
+                      }
+                      if (passwordController.text.trim().isEmpty) {
+                        return;
+                      }
+                      setState(() {
+                        isLoading = true;
+                      });
+                      try {
+                        final loginService = ref.read(authServiceProvider);
+                        final response = await loginService.clientLogin(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        );
+                        if (response) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => ClientMyBottomNav(),
+                            ),
+                            (route) => false,
+                          );
+                        }
+                      } catch (e) {
+                        log(e.toString());
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } finally {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
                     },
-                    child: Text(
-                      "Login",
-                      style: GoogleFonts.outfit(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.buttonText,
-                      ),
-                    ),
+                    child: isLoading
+                        ? SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(
+                              color: AppColors.buttonText,
+                              strokeWidth: 1.5,
+                            ),
+                          )
+                        : Text(
+                            "Login",
+                            style: GoogleFonts.outfit(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.buttonText,
+                            ),
+                          ),
                   ),
                 ),
                 SizedBox(height: 10.h),
@@ -126,42 +182,72 @@ class _ClientloginscreenState extends State<Clientloginscreen> {
       ),
     );
   }
-}
 
-Widget _login({required String lable, required String hint}) {
-  return Container(
-    padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.h, bottom: 12.h),
-    decoration: BoxDecoration(
-      color: Color.fromRGBO(37, 37, 37, 0.12),
-      borderRadius: BorderRadius.circular(10.r),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          lable,
-          style: GoogleFonts.outfit(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w400,
-            letterSpacing: -0.5,
-            color: AppColors.buttonText,
-          ),
-        ),
-        TextField(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            hint: Text(
-              hint,
-              style: GoogleFonts.parkinsans(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
-                color: Color(0xff838383),
-              ),
+  Widget _login({
+    required String lable,
+    required String hint,
+    required TextEditingController controller,
+    required TextInputType type,
+    bool obscureText = false,
+  }) {
+    return Container(
+      padding: EdgeInsets.only(
+        left: 12.w,
+        right: 12.w,
+        top: 12.h,
+        bottom: 12.h,
+      ),
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(37, 37, 37, 0.12),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            lable,
+            style: GoogleFonts.outfit(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              letterSpacing: -0.5,
+              color: AppColors.buttonText,
             ),
           ),
-        ),
-      ],
-    ),
-  );
+          TextField(
+            obscureText: obscureText ? isPasswordHide : false,
+            keyboardType: type,
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 12.h),
+              border: InputBorder.none,
+              hint: Text(
+                hint,
+                style: GoogleFonts.parkinsans(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff838383),
+                ),
+              ),
+              suffixIcon: obscureText
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isPasswordHide = !isPasswordHide;
+                        });
+                      },
+                      icon: Icon(
+                        isPasswordHide
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.black,
+                        size: 20.sp,
+                      ),
+                    )
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

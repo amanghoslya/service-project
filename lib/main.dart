@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'package:dwelleasy_ghana/clientScreen.dart/ClientHomeScreen.dart';
 import 'package:dwelleasy_ghana/clientScreen.dart/ClientWelcome.dart';
 import 'package:dwelleasy_ghana/core/utils/key.dart';
 import 'package:dwelleasy_ghana/screen/homeScreen.dart';
 import 'package:dwelleasy_ghana/screen/welComeScreen.dart';
+import 'package:dwelleasy_ghana/selectRolScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,19 +15,24 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox("userbox");
+  await Hive.openBox("employeeBox");
+  await Hive.openBox("clientBox");
   runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box("userbox");
-    var token = box.get("token");
-    log(token ?? "No Token Found");
+    // final employeeBox = Hive.box("employeeBox");
+    // final clientBox = Hive.box("clientBox");
+
+    // final employeeToken = employeeBox.get("token");
+    // final clientToken = clientBox.get("token");
+
+    // log("EMPLOYEE TOKEN => ${employeeToken ?? "NO EMPLOYEE TOKEN"}");
+    // log("CLIENT TOKEN => ${clientToken ?? "NO CLIENT TOKEN"}");
     return ScreenUtilInit(
       designSize: Size(430, 932),
       minTextAdapt: true,
@@ -59,10 +66,74 @@ class MyApp extends StatelessWidget {
               // tested with just a hot reload.
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            // home: token == null ? WelComeScreen() : MyBottomNav(),
-            home: Clientwelcome(),
+
+            // home:
+            //     /// Employee Login
+            //     employeeToken != null && employeeToken.toString().isNotEmpty
+            //     ? MyBottomNav()
+            //     /// Client Login
+            //     : clientToken != null && clientToken.toString().isNotEmpty
+            //     ? ClientMyBottomNav()
+            //     /// No Login
+            //     : const SelectRoleScreen(),
+            home: AuthCheck(),
           ),
         );
+      },
+    );
+  }
+}
+
+class AuthCheck extends StatelessWidget {
+  const AuthCheck({super.key});
+
+  Future<String?> _getInitialScreen() async {
+    final employeeBox = Hive.box("employeeBox");
+    final clientBox = Hive.box("clientBox");
+    final employeeToken = employeeBox.get("token");
+    final clientToken = clientBox.get("token");
+    log("EMPLOYEE TOKEN => ${employeeToken ?? "NO EMPLOYEE TOKEN"}");
+    log("CLIENT TOKEN => ${clientToken ?? "NO CLIENT TOKEN"}");
+
+    /// Employee Login
+    if (employeeToken != null && employeeToken.toString().isNotEmpty) {
+      return "employee";
+    }
+    /// Client Login
+    else if (clientToken != null && clientToken.toString().isNotEmpty) {
+      return "client";
+    }
+    /// No Login
+    else {
+      return "selectRole";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String?>(
+      future: _getInitialScreen(),
+      builder: (context, snapshot) {
+        /// Loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        final screen = snapshot.data;
+
+        /// Employee Home
+        if (screen == "employee") {
+          return MyBottomNav();
+        }
+        /// Client Home
+        else if (screen == "client") {
+          return ClientMyBottomNav();
+        }
+        /// Select Role Screen
+        else {
+          return const SelectRoleScreen();
+        }
       },
     );
   }

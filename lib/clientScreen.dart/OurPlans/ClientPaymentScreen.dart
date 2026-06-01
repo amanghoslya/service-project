@@ -1,18 +1,21 @@
+import 'package:dwelleasy_ghana/clientScreen.dart/OurPlans/ClientOurPlanProvider/createPlanServiceRequestProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/loginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Clientpaymentscreen extends StatefulWidget {
+class Clientpaymentscreen extends ConsumerStatefulWidget {
   const Clientpaymentscreen({super.key});
 
   @override
-  State<Clientpaymentscreen> createState() => _ClientpaymentscreenState();
+  ConsumerState<Clientpaymentscreen> createState() =>
+      _ClientpaymentscreenState();
 }
 
-class _ClientpaymentscreenState extends State<Clientpaymentscreen> {
+class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
   String? selectedPayment;
 
   List<String> paymentList = [
@@ -376,8 +379,18 @@ class _ClientpaymentscreenState extends State<Clientpaymentscreen> {
                     borderRadius: BorderRadiusGeometry.circular(100.r),
                   ),
                 ),
-                onPressed: () {
-                  showPaymentDialog();
+                onPressed: () async {
+                  ref
+                      .read(createPlanFormProvider.notifier)
+                      .createPlanRequestStep2(paymentMethod: 'cash');
+
+                  final success = await ref
+                      .read(createPlanFormProvider.notifier)
+                      .submit(ref);
+
+                  if (success) {
+                    showPaymentDialog();
+                  }
                 },
                 child: Text(
                   "Pay Now",

@@ -1,6 +1,7 @@
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/drawerScreen/notificationSettingScreen.dart';
 import 'package:dwelleasy_ghana/screen/loginScreen.dart';
+import 'package:dwelleasy_ghana/selectRolScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -80,7 +81,7 @@ class _SettingscreenState extends State<Settingscreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          var box = Hive.box("userbox");
+                          var box = Hive.box("employeeBox");
                           box.clear();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +113,7 @@ class _SettingscreenState extends State<Settingscreen> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             CupertinoPageRoute(
-                              builder: (context) => Loginscreen(),
+                              builder: (context) => SelectRoleScreen(),
                             ),
                             (route) => false,
                           );

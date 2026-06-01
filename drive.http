@@ -1,15 +1,16 @@
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTBhZGY3NWYwNmQ2MjRkM2M5NWU3MTQiLCJ1c2VyVHlwZSI6ImVtcGxveWVlIiwiaWF0IjoxNzc5MjUxNjA4LCJleHAiOjE4MTA3ODc2MDh9.YzcX-T6rp5ecYVKkutj9Xs0nLfcdiNwx85tcWjp7nLs
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTBmZjJmODMwZjkzZmQwMjBjMzExNTkiLCJ1c2VyVHlwZSI6InVzZXIiLCJpYXQiOjE3ODAwNTUzMzgsImV4cCI6MTgxMTU5MTMzOH0.TfRYHp1ARGnRhrsH5Sw_YqxyVmJ3Ka5lkmCJzW16DiA
 # @url =  http://localhost:4567
-@url =  http://192.168.1.43:4567
+# @url =  http://192.168.1.43:4567
 # @url =  https://qnr9g6df-4567.inc1.devtunnels.ms
+@url =  https://dwell.themediaradar.com
 
-//Register for client
+//Register for employee
 ###
 GET {{url}}/api/v1/employee/get-services HTTP/1.1
 Content-type: application/json
 
 
-//Register for client
+//Register for employee
 ###
 POST {{url}}/api/v1/employee/register HTTP/1.1
 Content-type: application/json
@@ -121,5 +122,201 @@ Authorization: {{token}}
 #     "status": "" // "pending", "approved", "rejected"
 # }
 
+### create-ticket
+POST {{url}}/api/v1/employee/create-ticket HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "subject": "abbbb",
+  "description": "abc"
+}
 
 
+### get-tickets
+GET {{url}}/api/v1/employee/get-tickets?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+
+
+
+//////////////////////////////////////////////////////////
+//Register for client
+###
+POST {{url}}/api/v1/user/register HTTP/1.1
+Content-type: application/json
+
+{
+      "fullName": "Julkarnen",
+      "email": "zn01@gmail.com",
+      "phone": "98776593211",
+      "password": "123456",
+      "deviceId": ""
+}
+
+//login
+###
+POST {{url}}/api/v1/user/login HTTP/1.1
+Content-type: application/json
+
+{
+    "email": "zn01@gmail.com",
+      "password": "12345678",
+      "deviceId": ""
+}
+
+
+//forgot-password
+###
+POST {{url}}/api/v1/user/forgot-password HTTP/1.1
+Content-type: application/json
+
+{
+    "email": "zn01@gmail.com"
+}
+
+//forgot-password-verify
+###
+POST {{url}}/api/v1/user/forgot-password-verify HTTP/1.1
+Content-type: application/json
+
+{
+    "token": "T42xozAVLFN4siqBYu9OpEQCJq9xnnFsF2m67FMi",
+    "otp": "123456",
+    "password": "12345678",
+    "confirmPassword": "12345678"
+}
+
+
+//profileGet
+###
+GET  {{url}}/api/v1/user/get-profile HTTP/1.1
+Content-type: application/json
+Authorization: {{token}}
+
+//update-profile
+###
+PUT {{url}}/api/v1/user/update-profile HTTP/1.1
+Content-type: application/json
+Authorization: {{token}}
+
+{
+  "fullName": "user",
+  "phone": "9877659321",
+  "address": "ram raj",
+  "image": ""
+}
+
+//get-plan
+###
+GET {{url}}/api/v1/user/get-plan HTTP/1.1
+Content-type: application/json
+Authorization: {{token}}
+
+
+//get-plan
+###
+GET {{url}}/api/v1/user/get-service-list HTTP/1.1
+Content-type: application/json
+Authorization: {{token}}
+
+//get-plan
+###
+GET {{url}}/api/v1/user/get-plan?serviceId=6a1533cfeb673d1da4ac7429 HTTP/1.1
+Content-type: application/json
+Authorization: {{token}}
+
+
+
+### Create Plan Request
+POST {{url}}/api/v1/user/create-plan-request HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "personalInformation": {
+    "fullName": "John Doe",
+    "email": "johndoe@example.com",
+    "phoneNumber": "08012345678",
+    "alternativePhoneNumber": "08087654321",
+    "nationalId": "A123456789",
+    "propertyAddress": "12 Allen Avenue, Lagos"
+  },
+
+  "propertyDetails": {
+    "bedrooms": "3",
+    "bathrooms": 2,
+    "acUnits": 4,
+    "propertyType": "Detached House",
+    "propertyAge": "5-10 years"
+  },
+
+  "planDetails": {
+    "serviceId": "6a1533cfeb673d1da4ac7429",
+    "planId": "6a13e0c9f21d4d293554e8b0"
+  },
+
+  "paymentAndBilling": {
+    "paymentMethod": "Mobile Money (MTN)",
+    "mobileMoneyNumber": "08012345678",
+    "preferredBillingDate": 15,
+    "howDidYouHearAboutUs": "Facebook"
+  },
+
+  "declaration": {
+    "informationAccurate": true,
+    "planStartsAfter14Days": true,
+    "agreeTermsAndConditions": true,
+    "noPreExistingFaults": true,
+    "electronicSignature": "John Doe",
+    "date": "2026-05-26"
+  },
+  "paymentMethod": "cash"
+}
+
+
+### get-my-plan-request
+GET {{url}}/api/v1/user/get-my-plan-request?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### get-my-plan-request-service
+GET {{url}}/api/v1/user/get-my-plan-request-service HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### create-service-rquest
+POST {{url}}/api/v1/user/create-service-rquest HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "serviceId": "6a1533cfeb673d1da4ac7429",
+  "description": "abc",
+  "preferredDate": 1779878482000
+}
+
+
+### get-service-request
+GET {{url}}/api/v1/user/get-service-request?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### create-ticket
+POST {{url}}/api/v1/user/create-ticket HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "subject": "abbbb",
+  "description": "abc"
+}
+
+
+### get-tickets
+GET {{url}}/api/v1/user/get-tickets?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}

@@ -1,19 +1,24 @@
+import 'dart:developer';
+
+import 'package:dwelleasy_ghana/clientScreen.dart/createRequest/createRequestProvider/getServiceRequestProvider.dart';
 import 'package:dwelleasy_ghana/clientScreen.dart/createRequest/employeeDetails.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class Myrequest extends StatefulWidget {
+class Myrequest extends ConsumerStatefulWidget {
   final bool isShowBack;
   const Myrequest({super.key, this.isShowBack = false});
 
   @override
-  State<Myrequest> createState() => _MyrequestState();
+  ConsumerState<Myrequest> createState() => _MyrequestState();
 }
 
-class _MyrequestState extends State<Myrequest> {
+class _MyrequestState extends ConsumerState<Myrequest> {
   final pendingList = [
     {
       "title": "AC Repair",
@@ -62,6 +67,7 @@ class _MyrequestState extends State<Myrequest> {
   ];
   @override
   Widget build(BuildContext context) {
+    final getServiceRequestState = ref.watch(getServiceRequestProvider);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -132,31 +138,222 @@ class _MyrequestState extends State<Myrequest> {
                 dividerColor: Color(0xFF04254E),
                 tabs: [
                   Tab(text: "Pending"),
-                  Tab(text: "Progress"),
+                  Tab(text: "In Progress"),
                   Tab(text: "Completed"),
                 ],
               ),
             ),
           ),
         ),
-        body: TabBarView(
-          children: [
-            buildServiceList(pendingList),
-            buildServiceList(progressList),
-            buildServiceList(completedList),
-          ],
+        body: getServiceRequestState.when(
+          data: (data) {
+            // return TabBarView(
+            //   children: [
+            //     buildServiceList(pendingList),
+            //     buildServiceList(progressList),
+            //     buildServiceList(completedList),
+            //   ],
+            // );
+            return TabBarView(
+              children: [
+                buildServiceList(
+                  data.data?.list
+                          ?.where((e) => e.status?.toLowerCase() == "pending")
+                          .toList() ??
+                      [],
+                  "pending",
+                ),
+
+                buildServiceList(
+                  data.data?.list
+                          ?.where(
+                            (e) => e.status?.toLowerCase() == "in_progress",
+                          )
+                          .toList() ??
+                      [],
+                  "in_progress",
+                ),
+
+                buildServiceList(
+                  data.data?.list
+                          ?.where((e) => e.status?.toLowerCase() == "completed")
+                          .toList() ??
+                      [],
+                  "completed",
+                ),
+              ],
+            );
+          },
+          error: (error, stackTrace) {
+            log(error.toString());
+            return Center(child: Text("Something went wrong"));
+          },
+          loading: () => Center(
+            child: CircularProgressIndicator(color: AppColors.buttonBg),
+          ),
         ),
       ),
     );
   }
 
-  Widget buildServiceList(List<Map<String, dynamic>> data) {
+  // Widget buildServiceList(List<Map<String, dynamic>> data) {
+  //   return ListView.separated(
+  //     padding: EdgeInsets.only(top: 24.h),
+  //     itemCount: data.length,
+  //     separatorBuilder: (_, __) => SizedBox(height: 18.h),
+  //     itemBuilder: (context, index) {
+  //       final item = data[index];
+  //       return Container(
+  //         margin: EdgeInsets.only(left: 16.w, right: 16.w),
+  //         padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 10.w),
+  //         decoration: BoxDecoration(
+  //           border: Border.all(color: Color(0xff0A2A5E), width: 1.3),
+  //           borderRadius: BorderRadius.circular(12.r),
+  //         ),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               item["title"],
+  //               style: GoogleFonts.outfit(
+  //                 fontSize: 16.sp,
+  //                 fontWeight: FontWeight.w500,
+  //                 color: const Color(0xff0A2A5E),
+  //               ),
+  //             ),
+  //             SizedBox(height: 8.h),
+  //             Text(
+  //               item["subtitle"],
+  //               style: GoogleFonts.parkinsans(
+  //                 fontSize: 12.sp,
+  //                 fontWeight: FontWeight.w500,
+  //                 height: 1.4,
+  //                 color: const Color(0xff04254E),
+  //               ),
+  //             ),
+  //             SizedBox(height: 8.h),
+  //             Container(
+  //               padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 6.h),
+  //               decoration: BoxDecoration(
+  //                 color: item["color"],
+  //                 borderRadius: BorderRadius.circular(20.r),
+  //               ),
+  //               child: Text(
+  //                 item["status"],
+  //                 style: GoogleFonts.parkinsans(
+  //                   fontSize: 12.sp,
+  //                   fontWeight: FontWeight.w500,
+  //                   color: Color(0xFF04254E),
+  //                 ),
+  //               ),
+  //             ),
+  //             SizedBox(height: 10.h),
+  //             SizedBox(
+  //               width: 131.w,
+  //               height: 30.h,
+  //               child: ElevatedButton(
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: const Color(0xFFF2D701),
+  //                   elevation: 0,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(4.r),
+  //                   ),
+  //                 ),
+  //                 onPressed: () {
+  //                   Navigator.push(
+  //                     context,
+  //                     CupertinoPageRoute(
+  //                       builder: (context) => EmployeeDetails(),
+  //                     ),
+  //                   );
+  //                 },
+  //                 child: Text(
+  //                   "View Details",
+  //                   style: GoogleFonts.parkinsans(
+  //                     fontSize: 10.sp,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Color(0xFF04254E),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  Widget buildServiceList(List<dynamic> data, String type) {
+    /// EMPTY UI
+    if (data.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.inbox_outlined,
+              size: 70.sp,
+              color: Colors.grey.shade400,
+            ),
+            SizedBox(height: 14.h),
+            Text(
+              "No Requests Found",
+              style: GoogleFonts.outfit(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.buttonText,
+              ),
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              type == "pending"
+                  ? "You don’t have any pending requests"
+                  : type == "in_progress"
+                  ? "No service is currently in progress"
+                  : "No completed requests available",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.parkinsans(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey.shade600,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     return ListView.separated(
-      padding: EdgeInsets.only(top: 24.h),
+      padding: EdgeInsets.only(top: 24.h, bottom: 20.h),
       itemCount: data.length,
       separatorBuilder: (_, __) => SizedBox(height: 18.h),
       itemBuilder: (context, index) {
         final item = data[index];
+
+        Color statusColor;
+
+        switch (type) {
+          case "pending":
+            statusColor = const Color(0xffFDEBB3);
+            break;
+
+          case "in_progress":
+            statusColor = const Color(0xffCCD3DD);
+            break;
+
+          case "completed":
+            statusColor = const Color(0xffCFE2BE);
+            break;
+
+          default:
+            statusColor = Colors.grey.shade300;
+        }
+
+        final preferredDate = DateFormat(
+          "dd MMM yyyy",
+        ).format(DateTime.fromMillisecondsSinceEpoch(item.preferredDate ?? 0));
+
         return Container(
           margin: EdgeInsets.only(left: 16.w, right: 16.w),
           padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 10.w),
@@ -168,7 +365,7 @@ class _MyrequestState extends State<Myrequest> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                item["title"],
+                item.serviceId?.name ?? "N/A",
                 style: GoogleFonts.outfit(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
@@ -177,7 +374,7 @@ class _MyrequestState extends State<Myrequest> {
               ),
               SizedBox(height: 8.h),
               Text(
-                item["subtitle"],
+                "Preferred Date: $preferredDate",
                 style: GoogleFonts.parkinsans(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
@@ -189,11 +386,11 @@ class _MyrequestState extends State<Myrequest> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: item["color"],
+                  color: statusColor,
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
-                  item["status"],
+                  item.status ?? "",
                   style: GoogleFonts.parkinsans(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w500,

@@ -103,16 +103,18 @@ class _EditprofilescreenState extends ConsumerState<Editprofilescreen> {
 
   void loadProfileData() async {
     final profile = ref.read(getProfileProvider);
-    final profileData = profile.value?.data;
-    fullNameController.text = profileData?.fullName ?? "";
-    phoneController.text = profileData?.phone ?? "";
-    emailController.text = profileData?.email ?? "";
-    experienceController.text = profileData?.experience ?? "";
-    cityController.text = profileData?.city ?? "";
-    selectedService = profileData?.serviceId?.id;
-    selectedAvailabity = profileData?.availability ?? "";
-    addressController.text = profileData?.address ?? "";
-    existingImage = profileData?.image ?? "";
+    // final profileData = profile.value?.data;
+    profile.whenData((profileData) {
+      fullNameController.text = profileData.data?.fullName ?? "";
+      phoneController.text = profileData.data?.phone ?? "";
+      emailController.text = profileData.data?.email ?? "";
+      experienceController.text = profileData.data?.experience ?? "";
+      cityController.text = profileData.data?.city ?? "";
+      selectedService = profileData.data?.id;
+      selectedAvailabity = profileData.data?.availability ?? "";
+      addressController.text = profileData.data?.address ?? "";
+      existingImage = profileData.data?.image ?? "";
+    });
   }
 
   bool isUpdateLoading = false;

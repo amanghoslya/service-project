@@ -1,20 +1,27 @@
+import 'dart:developer';
+
+import 'package:dwelleasy_ghana/clientScreen.dart/createRequest/createRequestProvider/getMyPlanRequestSerivceProvider.dart';
 import 'package:dwelleasy_ghana/clientScreen.dart/createRequest/myRequest.dart';
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CreateService extends StatefulWidget {
+class CreateService extends ConsumerStatefulWidget {
   const CreateService({super.key});
 
   @override
-  State<CreateService> createState() => _CreateServiceState();
+  ConsumerState<CreateService> createState() => _CreateServiceState();
 }
 
-class _CreateServiceState extends State<CreateService> {
+class _CreateServiceState extends ConsumerState<CreateService> {
   final TextEditingController dateController = TextEditingController();
-  String? selectedBedroom;
+  final TextEditingController descController = TextEditingController();
+  String? selecteService;
+  String? selecteServiceId;
   List<String> bedroomList = [
     "AC  Service",
     "Plumber Service",
@@ -34,6 +41,7 @@ class _CreateServiceState extends State<CreateService> {
       setState(() {
         selectedDate = pickedDate;
 
+        /// only for UI
         dateController.text =
             "${pickedDate.day.toString().padLeft(2, '0')}-"
             "${pickedDate.month.toString().padLeft(2, '0')}-"
@@ -42,8 +50,12 @@ class _CreateServiceState extends State<CreateService> {
     }
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final getMyPlanRequestServiceState = ref.watch(
+      getMyPlanRequestServiceProvider,
+    );
     return Scaffold(
       backgroundColor: AppColors.backgroungBg,
       appBar: AppBar(
@@ -103,203 +115,244 @@ class _CreateServiceState extends State<CreateService> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30.h),
-                    Text(
-                      "Choose Service",
-                      style: GoogleFonts.outfit(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.buttonText,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    myDropdown(
-                      listname: bedroomList,
-                      hintText: "Select Service",
-                      selectname: selectedBedroom,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedBedroom = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      "Problem Description",
-                      style: GoogleFonts.outfit(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.buttonText,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    TextField(
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        hint: Text(
-                          "Describe Your Issue...",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 15.sp,
+      body: getMyPlanRequestServiceState.when(
+        data: (data) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 30.h),
+                        Text(
+                          "Choose Service",
+                          style: GoogleFonts.outfit(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(127, 4, 37, 8),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(153, 4, 37, 78),
-                            width: 1.w,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
                             color: AppColors.buttonText,
-                            width: 1.w,
+                            letterSpacing: -0.3,
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      "Problem Description",
-                      style: GoogleFonts.outfit(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.buttonText,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    TextField(
-                      controller: dateController,
-                      readOnly: true,
-                      onTap: pickDate,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        hint: Text(
-                          "dd-mm-yyyy",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(127, 4, 37, 8),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(153, 4, 37, 78),
-                            width: 1.w,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide: BorderSide(
-                            color: AppColors.buttonText,
-                            width: 1.w,
-                          ),
-                        ),
-                        suffixIcon: Icon(
-                          Icons.calendar_month_outlined,
-                          color: AppColors.buttonText,
-                          size: 20.sp,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 45.h),
-                backgroundColor: AppColors.buttonBg,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(54.r),
-                ),
-              ),
-              onPressed: () {
-                showRequestDialog();
-              },
-              child: Text(
-                "Submit Request",
-                style: GoogleFonts.outfit(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF04254E),
-                  letterSpacing: -0.54,
-                ),
-              ),
-            ),
-            SizedBox(height: 20.h),
-          ],
-        ),
-      ),
-    );
-  }
+                        SizedBox(height: 10.h),
 
-  Widget myDropdown({
-    required List<String> listname,
-    required String? selectname,
-    required ValueChanged<String?> onChanged,
-    required String hintText,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: Color.fromARGB(153, 4, 37, 78), width: 1.w),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectname,
-          isExpanded: true,
-          dropdownColor: AppColors.backgroungBg,
-          icon: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: AppColors.buttonText,
-            size: 25.sp,
-          ),
-          hint: Padding(
-            padding: EdgeInsets.only(left: 8.w),
-            child: Text(
-              hintText,
-              style: GoogleFonts.parkinsans(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
-                color: const Color(0xff989897),
-              ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            border: Border.all(
+                              color: Color.fromARGB(153, 4, 37, 78),
+                              width: 1.w,
+                            ),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selecteService,
+                              isExpanded: true,
+                              dropdownColor: AppColors.backgroungBg,
+                              icon: Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                                color: AppColors.buttonText,
+                                size: 25.sp,
+                              ),
+                              hint: Padding(
+                                padding: EdgeInsets.only(left: 8.w),
+                                child: Text(
+                                  "Select Service",
+                                  style: GoogleFonts.parkinsans(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xff989897),
+                                  ),
+                                ),
+                              ),
+                              style: GoogleFonts.outfit(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.buttonText,
+                              ),
+                              items: data.data?.map((item) {
+                                return DropdownMenuItem<String>(
+                                  value: item.id,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 8.w),
+                                    child: Text(item.name ?? "N/A"),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selecteService = value;
+                                  selecteServiceId = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          "Problem Description",
+                          style: GoogleFonts.outfit(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.buttonText,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        TextField(
+                          maxLines: 5,
+                          controller: descController,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hint: Text(
+                              "Describe Your Issue...",
+                              style: GoogleFonts.parkinsans(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(127, 4, 37, 8),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(153, 4, 37, 78),
+                                width: 1.w,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide(
+                                color: AppColors.buttonText,
+                                width: 1.w,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          "Preferred Date",
+                          style: GoogleFonts.outfit(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.buttonText,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        TextField(
+                          controller: dateController,
+                          readOnly: true,
+                          onTap: pickDate,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hint: Text(
+                              "dd-mm-yyyy",
+                              style: GoogleFonts.parkinsans(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(127, 4, 37, 8),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(153, 4, 37, 78),
+                                width: 1.w,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide(
+                                color: AppColors.buttonText,
+                                width: 1.w,
+                              ),
+                            ),
+                            suffixIcon: Icon(
+                              Icons.calendar_month_outlined,
+                              color: AppColors.buttonText,
+                              size: 20.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 45.h),
+                    backgroundColor: AppColors.buttonBg,
+                    disabledBackgroundColor: AppColors.buttonBg.withOpacity(
+                      0.5,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(54.r),
+                    ),
+                    elevation: 0,
+                  ),
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          try {
+                            final service = ref.read(authServiceProvider);
+                            final isSucess = await service
+                                .clientCreateSerivceRequest(
+                                  serviceId: selecteServiceId!,
+                                  desc: descController.text.trim(),
+                                  preffrerData:
+                                      selectedDate?.millisecondsSinceEpoch ??
+                                      DateTime.now().millisecondsSinceEpoch,
+                                );
+                            if (isSucess) {
+                              showRequestDialog();
+                            }
+                          } catch (e, st) {
+                            log(e.toString());
+                            setState(() {
+                              isLoading = false;
+                            });
+                          } finally {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
+                  child: isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: AppColors.buttonText,
+                            strokeWidth: 1.5,
+                          ),
+                        )
+                      : Text(
+                          "Submit Request",
+                          style: GoogleFonts.outfit(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF04254E),
+                            letterSpacing: -0.54,
+                          ),
+                        ),
+                ),
+                SizedBox(height: 20.h),
+              ],
             ),
-          ),
-          style: GoogleFonts.outfit(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColors.buttonText,
-          ),
-          items: listname.map((item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Padding(
-                padding: EdgeInsets.only(left: 8.w),
-                child: Text(item),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
+          );
+        },
+        error: (error, stackTrace) {
+          return Center(child: Text("Something went wrong"));
+        },
+        loading: () =>
+            Center(child: CircularProgressIndicator(color: AppColors.buttonBg)),
       ),
     );
   }
