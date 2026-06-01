@@ -1,4 +1,251 @@
-import 'dart:developer';
+// import 'dart:developer';
+// import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
+// import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+// import 'package:dwelleasy_ghana/screen/forgot/forgotPasswordScreen.dart';
+// import 'package:dwelleasy_ghana/screen/homeScreen.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:google_fonts/google_fonts.dart';
+
+// class Loginscreen extends ConsumerStatefulWidget {
+//   const Loginscreen({super.key});
+
+//   @override
+//   ConsumerState<Loginscreen> createState() => _LoginscreenState();
+// }
+
+// class _LoginscreenState extends ConsumerState<Loginscreen> {
+//   final emailController = TextEditingController();
+//   final passwordController = TextEditingController();
+//   bool isPasswordHide = true;
+//   bool isLoading = false;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: AppColors.scaffoldBg,
+//       body: SingleChildScrollView(
+//         child: Padding(
+//           padding: EdgeInsets.symmetric(horizontal: 20.w),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               SizedBox(height: 103.h),
+//               Container(
+//                 width: 49.w,
+//                 height: 49.h,
+//                 decoration: BoxDecoration(
+//                   shape: BoxShape.circle,
+//                   color: AppColors.buttonBg,
+//                 ),
+//                 child: Center(
+//                   child: Text(
+//                     "v",
+//                     style: GoogleFonts.urbanist(
+//                       fontSize: 22.sp,
+//                       fontWeight: FontWeight.w600,
+//                       color: Color(0xFF000000),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               SizedBox(height: 8.h),
+//               Text(
+//                 "Employee Login",
+//                 style: GoogleFonts.inter(
+//                   fontSize: 20.sp,
+//                   fontWeight: FontWeight.w500,
+//                   color: Color(0xFFFFFFFF),
+//                 ),
+//               ),
+//               SizedBox(height: 8.h),
+//               Text(
+//                 "Sign in to access your dashboard",
+//                 style: GoogleFonts.inter(
+//                   fontSize: 16.sp,
+//                   fontWeight: FontWeight.w400,
+//                   color: Color(0xFF8D8D8D),
+//                 ),
+//               ),
+//               SizedBox(height: 26.h),
+//               _loginForm(
+//                 label: "Email or Phone",
+//                 hintText: "Enter Your Email Or Phone",
+//                 controller: emailController,
+//                 type: TextInputType.emailAddress,
+//               ),
+//               SizedBox(height: 16.h),
+//               _loginForm(
+//                 label: "Password",
+//                 hintText: "**************",
+//                 controller: passwordController,
+//                 type: TextInputType.visiblePassword,
+//                 obscureText: true,
+//               ),
+//               Align(
+//                 alignment: Alignment.centerRight,
+//                 child: TextButton(
+//                   style: TextButton.styleFrom(
+//                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+//                     padding: EdgeInsets.zero,
+//                   ),
+//                   onPressed: () {
+//                     Navigator.push(
+//                       context,
+//                       CupertinoPageRoute(
+//                         builder: (context) => ForgotPasswordScreen(),
+//                       ),
+//                     );
+//                   },
+//                   child: Text(
+//                     "Forgot password?",
+//                     style: GoogleFonts.inter(
+//                       fontSize: 14.sp,
+//                       fontWeight: FontWeight.w400,
+//                       color: Color(0xFFFFFFFF),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               SizedBox(height: 20.h),
+//               ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   minimumSize: Size(3398.w, 53.h),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(100.r),
+//                     side: BorderSide.none,
+//                   ),
+//                   backgroundColor: AppColors.buttonBg,
+//                 ),
+//                 onPressed: () async {
+//                   if (emailController.text.trim().isEmpty) {
+//                     return;
+//                   }
+//                   if (emailController.text.trim().isEmpty) {
+//                     return;
+//                   }
+//                   setState(() {
+//                     isLoading = true;
+//                   });
+
+//                   final authService = ref.read(authServiceProvider);
+//                   final success = await authService.employeeLogin(
+//                     email: emailController.text,
+//                     password: passwordController.text,
+//                     context: context,
+//                   );
+//                   setState(() {
+//                     isLoading = false;
+//                   });
+//                   if (success) {
+//                     Navigator.pushAndRemoveUntil(
+//                       context,
+//                       CupertinoPageRoute(builder: (context) => MyBottomNav()),
+//                       (route) => false,
+//                     );
+//                   }
+//                 },
+//                 child: isLoading
+//                     ? SizedBox(
+//                         width: 20,
+//                         height: 20,
+//                         child: CircularProgressIndicator(
+//                           color: AppColors.buttonText,
+//                           strokeWidth: 2.w,
+//                         ),
+//                       )
+//                     : Text(
+//                         "Login",
+//                         style: GoogleFonts.outfit(
+//                           fontSize: 14.sp,
+//                           fontWeight: FontWeight.w500,
+//                           color: AppColors.buttonText,
+//                         ),
+//                       ),
+//               ),
+//               SizedBox(height: 10.h),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _loginForm({
+//     required String label,
+//     required String hintText,
+//     required TextEditingController controller,
+//     required TextInputType type,
+//     bool obscureText = false,
+//   }) {
+//     return Container(
+//       padding: EdgeInsets.only(
+//         left: 12.w,
+//         right: 12.w,
+//         top: 12.h,
+//         bottom: 10.h,
+//       ),
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(10.r),
+//         color: AppColors.cardBg,
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Text(
+//             label,
+//             style: GoogleFonts.outfit(
+//               fontSize: 12.sp,
+//               fontWeight: FontWeight.w400,
+//               color: Color(0xFFFFFFFF),
+//             ),
+//           ),
+//           TextFormField(
+//             obscureText: obscureText ? isPasswordHide : false,
+//             keyboardType: type,
+//             controller: controller,
+//             cursorColor: Colors.white,
+//             style: GoogleFonts.parkinsans(
+//               color: Colors.white, // typed text white
+//               fontSize: 14.sp,
+//             ),
+//             autovalidateMode: AutovalidateMode.onUserInteraction,
+//             decoration: InputDecoration(
+//               contentPadding: EdgeInsets.only(top: 12.h),
+//               border: InputBorder.none,
+//               hint: Text(
+//                 hintText,
+//                 style: GoogleFonts.parkinsans(
+//                   fontSize: 16.sp,
+//                   fontWeight: FontWeight.w400,
+//                   color: Color.fromARGB(127, 255, 255, 255),
+//                 ),
+//               ),
+//               suffixIcon: obscureText
+//                   ? IconButton(
+//                       onPressed: () {
+//                         setState(() {
+//                           isPasswordHide = !isPasswordHide;
+//                         });
+//                       },
+//                       icon: Icon(
+//                         isPasswordHide
+//                             ? Icons.visibility_off
+//                             : Icons.visibility,
+//                         color: Colors.white,
+//                         size: 20.sp,
+//                       ),
+//                     )
+//                   : null,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/forgot/forgotPasswordScreen.dart';
@@ -19,153 +266,184 @@ class Loginscreen extends ConsumerStatefulWidget {
 class _LoginscreenState extends ConsumerState<Loginscreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
   bool isPasswordHide = true;
   bool isLoading = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 103.h),
-              Container(
-                width: 49.w,
-                height: 49.h,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.buttonBg,
-                ),
-                child: Center(
-                  child: Text(
-                    "v",
-                    style: GoogleFonts.urbanist(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                "Employee Login",
-                style: GoogleFonts.inter(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFFFFFFF),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                "Sign in to access your dashboard",
-                style: GoogleFonts.inter(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF8D8D8D),
-                ),
-              ),
-              SizedBox(height: 26.h),
-              _loginForm(
-                label: "Email or Phone",
-                hintText: "Enter Your Email Or Phone",
-                controller: emailController,
-                type: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 16.h),
-              _loginForm(
-                label: "Password",
-                hintText: "**************",
-                controller: passwordController,
-                type: TextInputType.visiblePassword,
-                obscureText: true,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: EdgeInsets.zero,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => ForgotPasswordScreen(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Forgot password?",
-                    style: GoogleFonts.inter(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(3398.w, 53.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.r),
-                    side: BorderSide.none,
-                  ),
-                  backgroundColor: AppColors.buttonBg,
-                ),
-                onPressed: () async {
-                  if (emailController.text.trim().isEmpty) {
-                    return;
-                  }
-                  if (emailController.text.trim().isEmpty) {
-                    return;
-                  }
-                  setState(() {
-                    isLoading = true;
-                  });
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              children: [
+                SizedBox(height: 80.h),
 
-                  final authService = ref.read(authServiceProvider);
-                  final success = await authService.employeeLogin(
-                    email: emailController.text,
-                    password: passwordController.text,
-                    context: context,
-                  );
-                  setState(() {
-                    isLoading = false;
-                  });
-                  if (success) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      CupertinoPageRoute(builder: (context) => MyBottomNav()),
-                      (route) => false,
-                    );
-                  }
-                },
-                child: isLoading
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: AppColors.buttonText,
-                          strokeWidth: 2.w,
-                        ),
-                      )
-                    : Text(
-                        "Login",
-                        style: GoogleFonts.outfit(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.buttonText,
-                        ),
+                /// LOGO
+                Container(
+                  width: 50.w,
+                  height: 50.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.buttonBg,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "V",
+                      style: GoogleFonts.urbanist(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
                       ),
-              ),
-              SizedBox(height: 10.h),
-            ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 16.h),
+
+                Text(
+                  "Employee Login",
+                  style: GoogleFonts.inter(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+
+                SizedBox(height: 6.h),
+
+                Text(
+                  "Sign in to access your dashboard",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF8D8D8D),
+                  ),
+                ),
+
+                SizedBox(height: 30.h),
+
+                _loginForm(
+                  label: "Email or Phone",
+                  hintText: "Enter your email or phone number",
+                  controller: emailController,
+                  type: TextInputType.emailAddress,
+                ),
+
+                SizedBox(height: 16.h),
+
+                _loginForm(
+                  label: "Password",
+                  hintText: "Enter your password",
+                  controller: passwordController,
+                  type: TextInputType.visiblePassword,
+                  obscureText: true,
+                ),
+
+                SizedBox(height: 10.h),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => ForgotPasswordScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: GoogleFonts.inter(
+                        fontSize: 14.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20.h),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 53.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.buttonBg,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100.r),
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (emailController.text.trim().isEmpty) return;
+                      if (passwordController.text.trim().isEmpty) return;
+
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      final authService = ref.read(authServiceProvider);
+
+                      final success = await authService.employeeLogin(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                        context: context,
+                      );
+
+                      if (mounted) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+
+                      if (success && mounted) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          CupertinoPageRoute(builder: (_) => MyBottomNav()),
+                          (route) => false,
+                        );
+                      }
+                    },
+                    child: isLoading
+                        ? SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.buttonText,
+                            ),
+                          )
+                        : Text(
+                            "Login",
+                            style: GoogleFonts.outfit(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.buttonText,
+                            ),
+                          ),
+                  ),
+                ),
+
+                SizedBox(height: 20.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -180,15 +458,12 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
     bool obscureText = false,
   }) {
     return Container(
-      padding: EdgeInsets.only(
-        left: 12.w,
-        right: 12.w,
-        top: 12.h,
-        bottom: 10.h,
-      ),
+      width: double.infinity,
+      height: 88.h,
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
         color: AppColors.cardBg,
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,48 +471,57 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
           Text(
             label,
             style: GoogleFonts.outfit(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: Color(0xFFFFFFFF),
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
             ),
           ),
-          TextFormField(
-            obscureText: obscureText ? isPasswordHide : false,
-            keyboardType: type,
-            controller: controller,
-            cursorColor: Colors.white,
-            style: GoogleFonts.parkinsans(
-              color: Colors.white, // typed text white
-              fontSize: 14.sp,
-            ),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 12.h),
-              border: InputBorder.none,
-              hint: Text(
-                hintText,
-                style: GoogleFonts.parkinsans(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(127, 255, 255, 255),
-                ),
+
+          SizedBox(height: 4.h),
+
+          Expanded(
+            child: TextFormField(
+              controller: controller,
+              keyboardType: type,
+              obscureText: obscureText ? isPasswordHide : false,
+              cursorColor: Colors.white,
+              style: GoogleFonts.parkinsans(
+                fontSize: 14.sp,
+                color: Colors.white,
               ),
-              suffixIcon: obscureText
-                  ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isPasswordHide = !isPasswordHide;
-                        });
-                      },
-                      icon: Icon(
-                        isPasswordHide
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.white,
-                        size: 20.sp,
-                      ),
-                    )
-                  : null,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+                hintText: hintText,
+                hintStyle: GoogleFonts.parkinsans(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white54,
+                ),
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 40.w,
+                  minHeight: 40.h,
+                ),
+                suffixIcon: obscureText
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isPasswordHide = !isPasswordHide;
+                          });
+                        },
+                        icon: Icon(
+                          isPasswordHide
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                      )
+                    : SizedBox(width: 40.w),
+              ),
             ),
           ),
         ],
