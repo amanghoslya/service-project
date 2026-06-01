@@ -226,6 +226,28 @@ class _HomescreenState extends ConsumerState<Homescreen> {
       "text": "Customer: john Doe",
     },
   ];
+  List<Map<String, dynamic>> employee = [
+    {
+      "image": "assets/WhatsApp Image 2026-05-07 at 12.12.29 PM.jpeg",
+      "name": "Welcome, Employee",
+      "time": "Here is your job\n summary for today",
+      "detiles": "View Job",
+      "colors1": AppColors.buttonText,
+      "colors2": AppColors.buttonText,
+      "colors3": AppColors.buttonText,
+      "colors4": AppColors.buttonBg,
+    },
+    {
+      "image": "assets/emaployee_image.jpeg",
+      "name": "Today's Shift",
+      "time": "Time:9:00 AM -1:00 PM",
+      "detiles": "View Schedule",
+      "colors1": AppColors.buttonBg,
+      "colors2": AppColors.buttonBg,
+      "colors3": AppColors.buttonBg,
+      "colors4": AppColors.buttonText,
+    },
+  ];
 
   int selectedIndex = -1;
 
@@ -457,7 +479,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
-                itemCount: 2,
+                itemCount: employee.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
@@ -477,7 +499,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12.r),
                             child: Image.asset(
-                              "assets/WhatsApp Image 2026-05-07 at 12.12.29 PM.jpeg",
+                              employee[index]["image"],
                               width: 365.w,
                               height: 159.h,
                               fit: BoxFit.cover,
@@ -490,21 +512,21 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Welcome, Employee",
+                                  employee[index]["name"],
                                   style: GoogleFonts.outfit(
                                     fontSize: 20.sp,
                                     fontWeight: FontWeight.w600,
-                                    color: Color(0xff04254E),
+                                    color: employee[index]["colors1"],
                                     letterSpacing: -0.5,
                                   ),
                                 ),
                                 SizedBox(height: 4.h),
                                 Text(
-                                  "Here is your job\nsummary for today",
+                                  employee[index]["time"],
                                   style: GoogleFonts.outfit(
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xff04254E),
+                                    color: employee[index]["colors2"],
                                     letterSpacing: -0.5,
                                   ),
                                 ),
@@ -515,15 +537,15 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                                     horizontal: 40.w,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Color(0xff04254E),
+                                    color: employee[index]["colors3"],
                                     borderRadius: BorderRadius.circular(50.r),
                                   ),
                                   child: Text(
-                                    "View Job",
+                                    employee[index]["detiles"],
                                     style: GoogleFonts.outfit(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xffF2D701),
+                                      color: employee[index]["colors4"],
                                       letterSpacing: -0.5,
                                     ),
                                   ),
