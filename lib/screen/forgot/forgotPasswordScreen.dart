@@ -66,15 +66,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               ),
               SizedBox(height: 100.h),
               Container(
-                padding: EdgeInsets.only(
-                  left: 12.w,
-                  right: 12.w,
-                  top: 12.h,
-                  bottom: 10.h,
-                ),
+                width: double.infinity,
+                height: 80.h,
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
                   color: AppColors.cardBg,
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,23 +80,32 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       "Email or Phone",
                       style: GoogleFonts.outfit(
                         fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
-                    TextFormField(
-                      cursorColor: Colors.white,
-                      controller: emailController,
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.zero,
-                        border: InputBorder.none,
-                        hint: Text(
-                          "jude@example.com",
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(127, 255, 255, 255),
+                    SizedBox(height: 10.h),
+                    Expanded(
+                      child: TextFormField(
+                        cursorColor: Colors.white,
+                        controller: emailController,
+                        style: GoogleFonts.parkinsans(
+                          fontSize: 14.sp,
+                          color: Colors.white,
+                        ),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
+                          hint: Text(
+                            "jude@example.com",
+                            style: GoogleFonts.parkinsans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white54,
+                            ),
                           ),
                         ),
                       ),

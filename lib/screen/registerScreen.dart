@@ -142,17 +142,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       },
                     ),
                     Container(
-                      width: double.infinity,
                       margin: EdgeInsets.only(bottom: 16.h),
-                      padding: EdgeInsets.only(
-                        left: 12.w,
-                        right: 12.w,
-                        top: 12.h,
-                        bottom: 10.h,
+                      width: double.infinity,
+                      height: 80.h,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
                         color: AppColors.cardBg,
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,46 +165,49 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               color: Color(0xFFFFFFFF),
                             ),
                           ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedService,
-                              isExpanded: true,
-                              dropdownColor: AppColors.scaffoldBg,
-                              icon: Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                size: 28.sp,
-                                color: AppColors.buttonBg,
-                              ),
-                              hint: Text(
-                                "Select Service",
-                                style: GoogleFonts.parkinsans(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color.fromARGB(127, 255, 255, 255),
+                          SizedBox(height: 10.h),
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedService,
+                                isExpanded: true,
+                                dropdownColor: AppColors.scaffoldBg,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  size: 28.sp,
+                                  color: AppColors.buttonBg,
                                 ),
+                                hint: Text(
+                                  "Select Service",
+                                  style: GoogleFonts.parkinsans(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromARGB(127, 255, 255, 255),
+                                  ),
+                                ),
+                                style: GoogleFonts.outfit(
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                // items: serviceList.map((item) {
+                                //   return DropdownMenuItem(
+                                //     value: item,
+                                //     child: Text(item),
+                                //   );
+                                // }).toList(),
+                                items: data.data?.map((e) {
+                                  return DropdownMenuItem(
+                                    value: e.id ?? "",
+                                    child: Text(e.name ?? ""),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedService = value;
+                                    selectedServiceId = value;
+                                  });
+                                },
                               ),
-                              style: GoogleFonts.outfit(
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFFFFFFF),
-                              ),
-                              // items: serviceList.map((item) {
-                              //   return DropdownMenuItem(
-                              //     value: item,
-                              //     child: Text(item),
-                              //   );
-                              // }).toList(),
-                              items: data.data?.map((e) {
-                                return DropdownMenuItem(
-                                  value: e.id ?? "",
-                                  child: Text(e.name ?? ""),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedService = value;
-                                  selectedServiceId = value;
-                                });
-                              },
                             ),
                           ),
                         ],
@@ -331,15 +333,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(
-                  left: 12.w,
-                  right: 12.w,
-                  top: 12.h,
-                  bottom: 10.h,
-                ),
+                width: double.infinity,
+                height: 80.h,
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
                   color: AppColors.cardBg,
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,69 +346,83 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     Text(
                       label,
                       style: GoogleFonts.outfit(
-                        fontSize: 12.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w400,
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    TextFormField(
-                      keyboardType: type,
-                      maxLength: maxLength,
-                      obscureText: isPasswordHide,
-                      cursorColor: Colors.white,
-                      controller: controller,
-                      style: TextStyle(color: Colors.white),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: InputDecoration(
-                        counterText: "",
-                        errorStyle: GoogleFonts.outfit(
+                    SizedBox(height: 10.h),
+                    Expanded(
+                      child: TextFormField(
+                        textAlignVertical: TextAlignVertical.center,
+                        keyboardType: type,
+                        maxLength: maxLength,
+                        obscureText: isPasswordHide,
+                        controller: controller,
+                        cursorColor: Colors.white,
+                        style: GoogleFonts.parkinsans(
                           fontSize: 14.sp,
-                          color: Colors.red,
+                          color: Colors.white,
                         ),
-                        contentPadding: EdgeInsets.only(top: 12.h),
-                        border: InputBorder.none,
-                        hint: Text(
-                          hintText,
-                          style: GoogleFonts.parkinsans(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(127, 255, 255, 255),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          errorStyle: GoogleFonts.outfit(
+                            fontSize: 14.sp,
+                            color: Colors.red,
                           ),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
+                          hint: Text(
+                            hintText,
+                            style: GoogleFonts.parkinsans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          suffixIconConstraints: BoxConstraints(
+                            minWidth: 40.w,
+                            minHeight: 40.h,
+                          ),
+                          suffixIcon: obscureText
+                              ? IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isPasswordHide = !isPasswordHide;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    isPasswordHide
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.white,
+                                    size: 20.sp,
+                                  ),
+                                )
+                              : null,
                         ),
-                        suffixIcon: obscureText
-                            ? IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isPasswordHide = !isPasswordHide;
-                                  });
-                                },
-                                icon: Icon(
-                                  isPasswordHide
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: Colors.white,
-                                  size: 20.sp,
-                                ),
-                              )
-                            : null,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          errorText = validator(value);
-                        });
-                      },
-                      validator: (value) {
-                        final error = validator(value);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (context.mounted) {
-                            setState(() {
-                              errorText = error;
-                            });
-                          }
-                        });
+                        onChanged: (value) {
+                          setState(() {
+                            errorText = validator(value);
+                          });
+                        },
+                        validator: (value) {
+                          final error = validator(value);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (context.mounted) {
+                              setState(() {
+                                errorText = error;
+                              });
+                            }
+                          });
 
-                        return null;
-                      },
+                          return null;
+                        },
+                      ),
                     ),
                   ],
                 ),

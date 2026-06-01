@@ -238,20 +238,17 @@ Widget _registerFormClient({
   return StatefulBuilder(
     builder: (context, setState) {
       return Padding(
-        padding: EdgeInsets.only(bottom: 16.h),
+        padding: EdgeInsets.only(bottom: 11.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(
-                left: 12.w,
-                right: 12.w,
-                top: 12.h,
-                bottom: 5.h,
-              ),
+              width: double.infinity,
+              height: 85.h,
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
                 color: Color.fromRGBO(37, 37, 37, 0.12),
+                borderRadius: BorderRadius.circular(10.r),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,68 +256,82 @@ Widget _registerFormClient({
                   Text(
                     label,
                     style: GoogleFonts.outfit(
-                      fontSize: 12.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
+                      letterSpacing: -0.5,
                       color: AppColors.buttonText,
                     ),
                   ),
-                  TextFormField(
-                    keyboardType: type,
-                    maxLength: maxLength,
-                    obscureText: isPasswordHide,
-                    controller: controller,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      errorStyle: GoogleFonts.outfit(
-                        fontSize: 14.sp,
-                        height: 0,
-                        color: Colors.red,
-                      ),
-                      contentPadding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                      border: InputBorder.none,
-                      hint: Text(
-                        hintText,
-                        style: GoogleFonts.parkinsans(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xff5D84B5),
-                        ),
-                      ),
-                      suffixIcon: obscureText
-                          ? IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isPasswordHide = !isPasswordHide;
-                                });
-                              },
-                              icon: Icon(
-                                isPasswordHide
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: AppColors.buttonText,
-                                size: 20.sp,
-                              ),
-                            )
-                          : null,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        errorText = validator(value);
-                      });
-                    },
-                    validator: (value) {
-                      final error = validator(value);
 
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (context.mounted) {
-                          setState(() {
-                            errorText = error;
-                          });
-                        }
-                      });
-                      return null;
-                    },
+                  SizedBox(height: 10.h),
+                  Expanded(
+                    child: TextFormField(
+                      cursorHeight: 24.h,
+                      textAlignVertical: TextAlignVertical.center,
+                      keyboardType: type,
+                      maxLength: maxLength,
+                      obscureText: isPasswordHide,
+                      controller: controller,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        counterText: "",
+                        errorStyle: GoogleFonts.outfit(
+                          fontSize: 14.sp,
+                          height: 0,
+                          color: Colors.red,
+                        ),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
+                        hint: Text(
+                          hintText,
+                          style: GoogleFonts.parkinsans(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xff5D84B5),
+                          ),
+                        ),
+                        suffixIconConstraints: BoxConstraints(
+                          minWidth: 40.w,
+                          minHeight: 40.h,
+                        ),
+                        suffixIcon: obscureText
+                            ? IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isPasswordHide = !isPasswordHide;
+                                  });
+                                },
+                                icon: Icon(
+                                  isPasswordHide
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: AppColors.buttonText,
+                                  size: 20.sp,
+                                ),
+                              )
+                            : null,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          errorText = validator(value);
+                        });
+                      },
+                      validator: (value) {
+                        final error = validator(value);
+
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (context.mounted) {
+                            setState(() {
+                              errorText = error;
+                            });
+                          }
+                        });
+                        return null;
+                      },
+                    ),
                   ),
                 ],
               ),

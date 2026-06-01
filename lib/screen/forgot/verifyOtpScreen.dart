@@ -350,15 +350,12 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
     required VoidCallback onTap,
   }) {
     return Container(
-      padding: EdgeInsets.only(
-        left: 12.w,
-        right: 12.w,
-        top: 12.h,
-        bottom: 10.h,
-      ),
+      width: double.infinity,
+      height: 80.h,
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
         color: AppColors.cardBg,
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,39 +363,53 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
           Text(
             label,
             style: GoogleFonts.outfit(
-              fontSize: 12.sp,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w400,
               color: Color(0xFFFFFFFF),
             ),
           ),
-          TextFormField(
-            obscureText: obscureText ? isHidden : false,
-            keyboardType: type,
-            controller: controller,
-            cursorColor: Colors.white,
-            style: TextStyle(color: Colors.white),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 12.h),
-              border: InputBorder.none,
-              hint: Text(
-                hintText,
-                style: GoogleFonts.parkinsans(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(127, 255, 255, 255),
-                ),
+          SizedBox(height: 10.h),
+          Expanded(
+            child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              controller: controller,
+              keyboardType: type,
+              obscureText: obscureText ? isPasswordHide : false,
+              cursorColor: Colors.white,
+              style: GoogleFonts.parkinsans(
+                fontSize: 15.sp,
+                color: Colors.white,
               ),
-              suffixIcon: obscureText
-                  ? IconButton(
-                      onPressed: onTap,
-                      icon: Icon(
-                        isHidden ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.white,
-                        size: 20.sp,
-                      ),
-                    )
-                  : null,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+                hint: Text(
+                  hintText,
+                  style: GoogleFonts.parkinsans(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white54,
+                  ),
+                ),
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 40.w,
+                  minHeight: 40.h,
+                ),
+                suffixIcon: obscureText
+                    ? IconButton(
+                        onPressed: onTap,
+                        icon: Icon(
+                          isHidden ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                      )
+                    : null,
+              ),
             ),
           ),
         ],

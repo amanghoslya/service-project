@@ -20,8 +20,8 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.buttonBg,
-      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColors.buttonBg),
+      backgroundColor: Color(0xffFFFFFF),
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: Color(0xffFFFFFF)),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -136,11 +136,11 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isSelected ? Color(0xffFFEE67) : Color(0xffFFFFFF),
           borderRadius: BorderRadius.circular(10.r),
           border: Border.all(
-            color: isSelected ? AppColors.buttonText : Colors.black26,
-            width: isSelected ? 2 : 1,
+            color: AppColors.buttonText,
+            width: isSelected ? 1 : 1,
           ),
           boxShadow: [
             BoxShadow(
@@ -160,7 +160,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
               width: 48.w,
               height: 48.h,
               decoration: BoxDecoration(
-                color: AppColors.buttonBg,
+                color: isSelected ? Color(0xffFFFFFF) : AppColors.buttonBg,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -208,7 +208,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                 shape: BoxShape.circle,
                 color: isSelected ? AppColors.buttonText : Colors.transparent,
                 border: Border.all(
-                  color: isSelected ? AppColors.buttonText : Colors.black38,
+                  color: isSelected ? AppColors.buttonText : Colors.transparent,
                 ),
               ),
               child: isSelected

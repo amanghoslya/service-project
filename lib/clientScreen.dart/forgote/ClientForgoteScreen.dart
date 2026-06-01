@@ -71,12 +71,9 @@ class _ClientforgotescreenState extends ConsumerState<Clientforgotescreen> {
               ),
               SizedBox(height: 56.h),
               Container(
-                padding: EdgeInsets.only(
-                  left: 12.w,
-                  right: 12.w,
-                  top: 12.h,
-                  bottom: 10.h,
-                ),
+                width: double.infinity,
+                height: 85.h,
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(37, 37, 37, 0.12),
                   borderRadius: BorderRadius.circular(10.r),
@@ -87,7 +84,7 @@ class _ClientforgotescreenState extends ConsumerState<Clientforgotescreen> {
                     Text(
                       "Email  / Phone",
                       style: GoogleFonts.outfit(
-                        fontSize: 12.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w400,
                         color: AppColors.buttonText,
                         letterSpacing: -0.5,
@@ -95,16 +92,21 @@ class _ClientforgotescreenState extends ConsumerState<Clientforgotescreen> {
                     ),
                     SizedBox(height: 10.h),
                     TextField(
+                      cursorHeight: 24.h,
+                      textAlignVertical: TextAlignVertical.center,
                       controller: emailController,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.zero,
                         border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
                         hint: Text(
                           "Kenny@example.com",
                           style: GoogleFonts.parkinsans(
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w400,
                             color: Color(0xff838383),
-                            fontSize: 16.sp,
                           ),
                         ),
                       ),
