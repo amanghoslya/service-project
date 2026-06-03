@@ -1,20 +1,26 @@
+import 'dart:developer';
+
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/screen/detilesScreen.dart';
+import 'package:dwelleasy_ghana/screen/work/provider/getAssignRequestProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class PendingScreen extends StatefulWidget {
+class PendingScreen extends ConsumerStatefulWidget {
   const PendingScreen({super.key});
 
   @override
-  State<PendingScreen> createState() => _PendingScreenState();
+  ConsumerState<PendingScreen> createState() => _PendingScreenState();
 }
 
-class _PendingScreenState extends State<PendingScreen> {
+class _PendingScreenState extends ConsumerState<PendingScreen> {
   @override
   Widget build(BuildContext context) {
+    final pendingRequestState = ref.watch(getPendingRequestProvider);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: Column(
@@ -87,133 +93,220 @@ class _PendingScreenState extends State<PendingScreen> {
               ],
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
-                padding: EdgeInsets.only(
-                  top: 15.h,
-                  left: 15.w,
-                  right: 15.w,
-                  bottom: 13.h,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xff34383D),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
+          SizedBox(height: 16.h),
+          pendingRequestState.when(
+            data: (data) {
+              if (data.data?.list == null || data.data!.list!.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 90.h,
+                            width: 90.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff34383D),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: const Color(0xffF2D701),
+                                width: 2,
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.assignment_turned_in_outlined,
+                              size: 45.sp,
+                              color: const Color(0xffF2D701),
+                            ),
+                          ),
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 🔥 Date
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "20 Apr 2025",
+                          SizedBox(height: 20.h),
+
+                          Text(
+                            "No Pending Jobs",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.outfit(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          SizedBox(height: 10.h),
+
+                          Text(
+                            "You don't have any pending work requests yet.",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.parkinsans(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: data.data?.list?.length,
+                  itemBuilder: (context, index) {
+                    final pending = data.data?.list?[index];
+                    final prefferedDate = DateTime.fromMillisecondsSinceEpoch(
+                      pending?.date ?? 0,
+                    );
+                    final formateDate = DateFormat(
+                      'dd MM yyyy',
+                    ).format(prefferedDate);
+
+                    return Container(
+                      margin: EdgeInsets.only(
+                        left: 16.w,
+                        right: 16.w,
+                        bottom: 16.h,
+                      ),
+                      padding: EdgeInsets.only(
+                        top: 15.h,
+                        left: 15.w,
+                        right: 15.w,
+                        bottom: 13.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xff34383D),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 🔥 Date
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  // "20 Apr 2025",
+                                  formateDate,
+                                  style: GoogleFonts.parkinsans(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18.sp,
+                                    color: Colors.white,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: 99.w,
+                                height: 33.h,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(242, 215, 1, 0.3),
+                                  borderRadius: BorderRadius.circular(40.r),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    // "Pending",
+                                    pending?.status ?? "",
+                                    style: GoogleFonts.outfit(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13.sp,
+                                      color: AppColors.buttonBg,
+                                      letterSpacing: -0.5,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 14.h),
+
+                          // 🔥 Time
+                          Text(
+                            "Time: 9:00 AM - 1:00 PM",
                             style: GoogleFonts.parkinsans(
                               fontWeight: FontWeight.w500,
-                              fontSize: 18.sp,
+                              fontSize: 16.sp,
                               color: Colors.white,
                               letterSpacing: -0.5,
                             ),
                           ),
-                        ),
-                        Container(
-                          width: 99.w,
-                          height: 33.h,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(242, 215, 1, 0.3),
-                            borderRadius: BorderRadius.circular(40.r),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Pending",
-                              style: GoogleFonts.outfit(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13.sp,
-                                color: AppColors.buttonBg,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
 
-                    SizedBox(height: 14.h),
-
-                    // 🔥 Time
-                    Text(
-                      "Time: 9:00 AM - 1:00 PM",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-
-                    SizedBox(height: 10.h),
-                    Text(
-                      "Area: Thema",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-
-                    SizedBox(height: 10.h),
-
-                    // 🔥 Service
-                    Text(
-                      "Service: AC Repair",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-
-                    SizedBox(height: 14.h),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Detilesscreen(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 9.h),
-                        decoration: BoxDecoration(
-                          color: Color(0xffF2D701),
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "View Details",
-                            style: GoogleFonts.outfit(
-                              fontSize: 16.sp,
+                          SizedBox(height: 10.h),
+                          Text(
+                            "Area: Thema",
+                            style: GoogleFonts.parkinsans(
                               fontWeight: FontWeight.w500,
-                              color: Color(0xff04254E),
+                              fontSize: 16.sp,
+                              color: Colors.white,
                               letterSpacing: -0.5,
                             ),
                           ),
-                        ),
+
+                          SizedBox(height: 10.h),
+
+                          // 🔥 Service
+                          Text(
+                            // "Service: AC Repair",
+                            "Service: ${pending?.serviceId?.name ?? ""}",
+                            style: GoogleFonts.parkinsans(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+
+                          SizedBox(height: 14.h),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => Detilesscreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 9.h),
+                              decoration: BoxDecoration(
+                                color: Color(0xffF2D701),
+                                borderRadius: BorderRadius.circular(50.r),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "View Details",
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff04254E),
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               );
             },
+            error: (error, stackTrace) {
+              log(error.toString());
+              return Center(child: Text("Something went wrong"));
+            },
+            loading: () => SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(color: AppColors.buttonBg),
+              ),
+            ),
           ),
         ],
       ),

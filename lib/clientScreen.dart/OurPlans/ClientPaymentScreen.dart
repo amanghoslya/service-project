@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:dwelleasy_ghana/clientScreen.dart/ClientHomeScreen.dart';
 import 'package:dwelleasy_ghana/clientScreen.dart/OurPlans/ClientOurPlanProvider/createPlanServiceRequestProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/core/utils/pretty.dio.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceDetailsModel.dart';
 import 'package:dwelleasy_ghana/screen/loginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +13,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Clientpaymentscreen extends ConsumerStatefulWidget {
-  const Clientpaymentscreen({super.key});
+  final Datum selectedPlan;
+  final String customerName;
+  final String selectedDate;
+  const Clientpaymentscreen({
+    super.key,
+    required this.selectedPlan,
+    required this.customerName,
+    required this.selectedDate,
+  });
 
   @override
   ConsumerState<Clientpaymentscreen> createState() =>
@@ -85,7 +98,8 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  "GHS 149",
+                  // "GHS 149",
+                  "${widget.selectedPlan.currency} ${widget.selectedPlan.priceMonthly}",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
                     fontSize: 29.sp,
@@ -107,6 +121,13 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ClientMyBottomNav(),
+                        ),
+                        (route) => false,
+                      );
                     },
                     child: Text(
                       "Continue",
@@ -126,6 +147,8 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
       },
     );
   }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +228,8 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Basic Plan",
+                    // "Basic Plan",
+                    widget.selectedPlan.name ?? "",
                     style: GoogleFonts.parkinsans(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
@@ -249,7 +273,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                           ),
                         ),
                         TextSpan(
-                          text: " Dakarai",
+                          text: " ${widget.customerName}",
                           style: GoogleFonts.parkinsans(
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
@@ -272,7 +296,8 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                           ),
                         ),
                         TextSpan(
-                          text: " 15 Apr 2025",
+                          // text: " 15 Apr 2025",
+                          text: widget.selectedDate,
                           style: GoogleFonts.parkinsans(
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
@@ -286,7 +311,8 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "GHS 149",
+                      // "GHS 149",
+                      "${widget.selectedPlan.currency} ${widget.selectedPlan.priceMonthly}",
                       style: GoogleFonts.parkinsans(
                         fontSize: 20.h,
                         fontWeight: FontWeight.w500,
@@ -374,33 +400,68 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
               height: 48.h,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  disabledBackgroundColor: AppColors.buttonBg.withOpacity(0.5),
                   backgroundColor: AppColors.buttonBg,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadiusGeometry.circular(100.r),
                   ),
                 ),
-                onPressed: () async {
-                  ref
-                      .read(createPlanFormProvider.notifier)
-                      .createPlanRequestStep2(paymentMethod: 'cash');
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        if (selectedPayment == null) {
+                          showErrorSnackBar("Please Select Payment Method");
+                          return;
+                        }
+                        setState(() {
+                          isLoading = true;
+                        });
 
-                  final success = await ref
-                      .read(createPlanFormProvider.notifier)
-                      .submit(ref);
+                        try {
+                          ref
+                              .read(createPlanFormProvider.notifier)
+                              .createPlanRequestStep2(
+                                // paymentMethod: 'cash',
+                                paymentMethod: selectedPayment!,
+                              );
 
-                  if (success) {
-                    showPaymentDialog();
-                  }
-                },
-                child: Text(
-                  "Pay Now",
-                  style: GoogleFonts.outfit(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: -0.3,
-                    color: AppColors.buttonText,
-                  ),
-                ),
+                          final success = await ref
+                              .read(createPlanFormProvider.notifier)
+                              .submit(ref);
+
+                          if (success && mounted) {
+                            showPaymentDialog();
+                          }
+                        } catch (e) {
+                          log("ERROR => $e");
+                        } finally {
+                          if (mounted) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        }
+                      },
+                child: isLoading
+                    ? SizedBox(
+                        height: 22.h,
+                        width: 22.w,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.buttonText,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        "Pay Now",
+                        style: GoogleFonts.outfit(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: -0.3,
+                          color: AppColors.buttonText,
+                        ),
+                      ),
               ),
             ),
           ],

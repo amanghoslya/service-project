@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:dwelleasy_ghana/data/provider/getProfileProvider.dart';
 import 'package:dwelleasy_ghana/screen/Drawer/MyDrawerScreen.dart';
@@ -15,6 +17,7 @@ import 'package:dwelleasy_ghana/screen/profileScreen.dart';
 import 'package:dwelleasy_ghana/screen/work/assignedScreen.dart';
 import 'package:dwelleasy_ghana/screen/work/compleScreen.dart';
 import 'package:dwelleasy_ghana/screen/work/pendingScreen.dart';
+import 'package:dwelleasy_ghana/screen/work/provider/getAssignCountProvider.dart';
 import 'package:dwelleasy_ghana/selectRolScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +25,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyBottomNav extends ConsumerStatefulWidget {
   const MyBottomNav({super.key});
@@ -254,17 +258,18 @@ class _HomescreenState extends ConsumerState<Homescreen> {
   @override
   Widget build(BuildContext context) {
     final profileState = ref.watch(getProfileProvider);
+    final assignCountState = ref.watch(getAssignCountProvider);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      appBar: AppBar(
-        toolbarHeight: 90.h,
-        leadingWidth: 260.w,
-        backgroundColor: AppColors.scaffoldBg,
-        leading: Padding(
-          padding: EdgeInsets.only(left: 16.w, top: 16.h),
-          child: profileState.when(
-            data: (data) {
-              return Row(
+      appBar: profileState.when(
+        data: (data) {
+          return AppBar(
+            toolbarHeight: 90.h,
+            leadingWidth: 260.w,
+            backgroundColor: AppColors.scaffoldBg,
+            leading: Padding(
+              padding: EdgeInsets.only(left: 16.w, top: 16.h),
+              child: Row(
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(10.r),
@@ -350,57 +355,122 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                     ],
                   ),
                 ],
-              );
-            },
-            error: (error, stackTrace) {
-              return Text(
-                error.toString(),
-                style: GoogleFonts.inter(color: Colors.white),
-              );
-            },
-            loading: () => SizedBox(
-              width: 20,
-              height: 20,
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 1.5,
+              ),
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => Notificationscreen(),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 20.r,
+                    backgroundColor: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xffF2D701)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.notifications_none,
+                        color: const Color(0xffF2D701),
+                        size: 20.sp,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        error: (error, stackTrace) {
+          log(error.toString());
+          return PreferredSize(
+            preferredSize: Size.fromHeight(90.h),
+            child: Center(
+              child: Text(
+                "Something went wrong",
+                style: GoogleFonts.outfit(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
+          );
+        },
+        loading: () => PreferredSize(
+          preferredSize: Size.fromHeight(90.h),
+          child: AppBar(
+            toolbarHeight: 90.h,
+            backgroundColor: AppColors.scaffoldBg,
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            title: Shimmer.fromColors(
+              baseColor: Colors.white.withOpacity(0.2),
+              highlightColor: Colors.white.withOpacity(0.4),
+              child: Row(
+                children: [
+                  Container(
+                    width: 60.w,
+                    height: 60.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 120.w,
+                        height: 16.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Container(
+                        width: 90.w,
+                        height: 12.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(top: 10.h, right: 16.w),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.white.withOpacity(0.2),
+                  highlightColor: Colors.white.withOpacity(0.4),
+                  child: Container(
+                    width: 40.w,
+                    height: 40.h,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(top: 26.h, right: 16.w),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => Notificationscreen(),
-                  ),
-                );
-              },
-              child: CircleAvatar(
-                radius: 20.r,
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xffF2D701)),
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.notifications_none,
-                    color: const Color(0xffF2D701),
-                    size: 20.sp,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -561,35 +631,51 @@ class _HomescreenState extends ConsumerState<Homescreen> {
               ),
             ),
             SizedBox(height: 33.h),
-            Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w),
-              child: Row(
-                children: [
-                  _complete("8", "Assigned", () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => Assignedscreen(),
-                      ),
-                    );
-                  }),
-                  SizedBox(width: 16.w),
-                  _complete("3", "Pending", () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(builder: (context) => PendingScreen()),
-                    );
-                  }),
-                  SizedBox(width: 16.w),
-                  _complete("5", "Completed", () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => Completescreen(),
-                      ),
-                    );
-                  }),
-                ],
+            assignCountState.when(
+              data: (countData) {
+                final assign = countData.data?.assigned;
+                final pending = countData.data?.pending;
+                final complete = countData.data?.completed;
+                return Padding(
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  child: Row(
+                    children: [
+                      _complete(assign.toString(), "Assigned", () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Assignedscreen(),
+                          ),
+                        );
+                      }),
+                      SizedBox(width: 16.w),
+                      _complete(pending.toString(), "Pending", () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => PendingScreen(),
+                          ),
+                        );
+                      }),
+                      SizedBox(width: 16.w),
+                      _complete(complete.toString(), "Completed", () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Completescreen(),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                );
+              },
+              error: (error, stackTrace) {
+                log(error.toString());
+                return Center(child: Text("something went wrong"));
+              },
+              loading: () => Center(
+                child: CircularProgressIndicator(color: AppColors.buttonBg),
               ),
             ),
             SizedBox(height: 20.h),
@@ -625,7 +711,6 @@ class _HomescreenState extends ConsumerState<Homescreen> {
             //   child: Row(
             //     children: List.generate(items.length, (index) {
             //       bool isSelected = selectedIndex == index;
-
             //       return GestureDetector(
             //         onTap: () {
             //           setState(() {
@@ -655,7 +740,6 @@ class _HomescreenState extends ConsumerState<Homescreen> {
             //                       : Colors.white,
             //                 ),
             //               ),
-
             //               SizedBox(height: 8.h),
             //               SizedBox(
             //                 height: 40.h,
@@ -812,7 +896,7 @@ Widget _complete(String text, String title, VoidCallback onTap) {
         ),
 
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // 🔥 vertical center
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(

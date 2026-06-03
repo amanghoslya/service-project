@@ -25,7 +25,11 @@ import 'package:dwelleasy_ghana/data/model/createLeaveRequestResModel.dart';
 import 'package:dwelleasy_ghana/data/model/createTicketBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/forgotPasswordBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/forgotPasswordResModel.dart';
+import 'package:dwelleasy_ghana/data/model/getAssignCountModel.dart';
+import 'package:dwelleasy_ghana/data/model/getAssigneRequestModel.dart';
+import 'package:dwelleasy_ghana/data/model/getCompleteRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getMyLeaveModel.dart';
+import 'package:dwelleasy_ghana/data/model/getPendingRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getProfileModel.dart';
 import 'package:dwelleasy_ghana/data/model/getServiceResModel.dart';
 import 'package:dwelleasy_ghana/data/model/getTicketModel.dart';
@@ -283,6 +287,62 @@ class AuthService {
       throw Exception(e.toString());
     }
   }
+ 
+ Future<GetAssignCount> getAssignCount() async {
+    try {
+      final response = await api.getAssignCount();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  
+ 
+ Future<GetAssignedRequestsModel> getAssignRequestList() async {
+    try {
+      final response = await api.getAssignRequest();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<GetPendingRequestsModel> getPendingRequestList() async {
+    try {
+      final response = await api.getPendingRequest();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+ Future<GetCompleteRequestsModel> getCompleteRequestList() async {
+    try {
+      final response = await api.getCompleteRequest();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  
+
+
+
+
 
   /////////////////////////////////  Client (User) //////////////////////////////
   Future<bool> clientRegister({
@@ -548,7 +608,8 @@ class AuthService {
 
           date: date,
         ),
-        paymentMethod: "cash",
+        // paymentMethod: "cash",
+        paymentMethod: paymentMethod,
       );
       log(body.toJson().toString());
       final response = await api.clientCreatePlanRequest(body);

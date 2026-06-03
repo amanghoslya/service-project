@@ -191,6 +191,8 @@ class _ClientoursignupscreenState extends ConsumerState<Clientoursignupscreen> {
     }
   }
 
+  Datum? selectedPlanData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -469,7 +471,9 @@ class _ClientoursignupscreenState extends ConsumerState<Clientoursignupscreen> {
                             value: item.id ?? "",
                             child: Padding(
                               padding: EdgeInsets.only(left: 8.w),
-                              child: Text(item.name ?? "N/A"),
+                              child: Text(
+                                "${item.name} (${item.currency} ${item.priceMonthly}/month)",
+                              ),
                             ),
                           );
                         }).toList(),
@@ -477,6 +481,10 @@ class _ClientoursignupscreenState extends ConsumerState<Clientoursignupscreen> {
                           setState(() {
                             selectPlanType = value;
                             selectPlanTypeID = value;
+                            /////////
+                            selectedPlanData = widget.plantype.firstWhere(
+                              (item) => item.id == value,
+                            );
                           });
                         },
                       ),
@@ -760,7 +768,13 @@ class _ClientoursignupscreenState extends ConsumerState<Clientoursignupscreen> {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (context) => Clientpaymentscreen(),
+                        builder: (context) => Clientpaymentscreen(
+                          selectedPlan: selectedPlanData!,
+                          customerName: fullNameController.text.trim(),
+                          selectedDate: DateFormat(
+                            "yyyy-MM-dd",
+                          ).format(DateTime.now()),
+                        ),
                       ),
                     );
                   },

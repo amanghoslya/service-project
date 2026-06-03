@@ -78,6 +78,11 @@ Dio callDio() {
         handler.next(response);
       },
       onError: (DioException error, handler) {
+        log("DIO TYPE => ${error.type}");
+        log("DIO MESSAGE => ${error.message}");
+        log("DIO ERROR => ${error.error}");
+        log("DIO RESPONSE => ${error.response?.data}");
+
         String errorMessage = "Something went wrong";
         if (error.type == DioExceptionType.connectionTimeout) {
           errorMessage = "Connection timeout";

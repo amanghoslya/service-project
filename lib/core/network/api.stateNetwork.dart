@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/CForgotPassBodyModel.dart';
@@ -30,7 +29,11 @@ import 'package:dwelleasy_ghana/data/model/createTicketBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/createTicketResModel.dart';
 import 'package:dwelleasy_ghana/data/model/forgotPasswordBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/forgotPasswordResModel.dart';
+import 'package:dwelleasy_ghana/data/model/getAssignCountModel.dart';
+import 'package:dwelleasy_ghana/data/model/getAssigneRequestModel.dart';
+import 'package:dwelleasy_ghana/data/model/getCompleteRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getMyLeaveModel.dart';
+import 'package:dwelleasy_ghana/data/model/getPendingRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getProfileModel.dart';
 import 'package:dwelleasy_ghana/data/model/getServiceResModel.dart';
 import 'package:dwelleasy_ghana/data/model/getTicketModel.dart';
@@ -92,13 +95,23 @@ abstract class ApiStateNetwork {
   @GET("/api/v1/employee/get-my-leave-requests?page=1&limit=10")
   Future<GetMyLeaveModel> myLeaveRequest();
 
-    @POST("/api/v1/employee/create-ticket")
-  Future<CreateTicketResModel> createTicket(
-    @Body() CreateTicketBodyModel body,
-  );
+  @POST("/api/v1/employee/create-ticket")
+  Future<CreateTicketResModel> createTicket(@Body() CreateTicketBodyModel body);
 
   @GET("/api/v1/employee/get-tickets?page=1&limit=10")
   Future<GetTicketModel> getTicket();
+
+  @GET("/api/v1/employee/get-assign-count")
+  Future<GetAssignCount> getAssignCount();
+
+  @GET("/api/v1/employee/get-assigned-requests?page=1&limit=10")
+  Future<GetAssignedRequestsModel> getAssignRequest();
+
+  @GET("/api/v1/employee/get-pending-requests?page=1&limit=10")
+  Future<GetPendingRequestsModel> getPendingRequest();
+
+  @GET("/api/v1/employee/get-completed-requests?page=1&limit=10")
+  Future<GetCompleteRequestsModel> getCompleteRequest();
 
   ////////////////////////////////  Client (user) ////////////////////////////
   ////////////////////////////////////////////////////////////////////////
