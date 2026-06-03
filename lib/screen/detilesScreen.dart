@@ -9,7 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Detilesscreen extends StatefulWidget {
-  const Detilesscreen({super.key});
+  final String requestId;
+  const Detilesscreen({super.key,required this.requestId});
 
   @override
   State<Detilesscreen> createState() => _DetilesscreenState();
@@ -432,7 +433,8 @@ class _DetilesscreenState extends State<Detilesscreen> {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => Completejobscreen(),
+                      builder: (context) =>
+                          Completejobscreen(requestID: widget.requestId),
                     ),
                   );
                 },

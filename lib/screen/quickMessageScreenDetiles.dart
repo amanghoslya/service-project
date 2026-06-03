@@ -161,13 +161,15 @@ class _QuickmessagescreendetilesState
                 ),
                 SizedBox(height: 16.h),
                 InkWell(
+                  borderRadius: BorderRadius.circular(50.r),
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
                     if (messageController.text.trim().isEmpty) {
                       return;
                     }
+                    setState(() {
+                      isLoading = true;
+                    });
+
                     try {
                       final service = ref.read(authServiceProvider);
                       final isSucess = await service.sendMessage(

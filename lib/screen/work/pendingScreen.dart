@@ -266,7 +266,9 @@ class _PendingScreenState extends ConsumerState<PendingScreen> {
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                  builder: (context) => Detilesscreen(),
+                                  builder: (context) => Detilesscreen(
+                                    requestId: data.data!.list![index].id ?? "",
+                                  ),
                                 ),
                               );
                             },

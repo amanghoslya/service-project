@@ -36,6 +36,7 @@ import 'package:dwelleasy_ghana/data/model/getServiceResModel.dart';
 import 'package:dwelleasy_ghana/data/model/getTicketModel.dart';
 import 'package:dwelleasy_ghana/data/model/loginBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerBodyModel.dart';
+import 'package:dwelleasy_ghana/data/model/requestCompleteBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/sendMessageBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileResModel.dart';
@@ -362,6 +363,39 @@ class AuthService {
     try {
       final body = SendMessageBodyModel(requestId: requestId, message: message);
       final response = await api.sendMessage(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Login Success");
+        showSuccessSnackBar(response.message ?? "Sucess");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("ERROR => $e");
+      log("STACK TRACE => $st");
+      return false;
+    }
+  }
+
+  Future<bool> requestComplete({
+    File? uploadImage,
+    required String requestId,
+    required String remark,
+  }) async {
+    try {
+      String imageUrl = "";
+      if (uploadImage != null) {
+        final uploadResponse = await api.uploadImage(uploadImage);
+
+        if (uploadResponse.code == 0 && uploadResponse.error == false) {
+          imageUrl = uploadResponse.data?.imageUrl ?? "";
+        }
+      }
+      final body = RequestCompleteBodyModel(
+        requestId: requestId,
+        remark: remark,
+        image: imageUrl,
+      );
+      final response = await api.requestComplete(body);
       if (response.code == 0 && response.error == false) {
         log(response.message ?? "Login Success");
         showSuccessSnackBar(response.message ?? "Sucess");

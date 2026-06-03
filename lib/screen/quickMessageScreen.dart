@@ -164,7 +164,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => Detilesscreen(),
+                            builder: (context) => Detilesscreen(requestId: '',),
                           ),
                         );
                       },

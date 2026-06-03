@@ -179,7 +179,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "requestId":""
+    "requestId":"6a192e048b0ca59fa83600ec",
+    "remark":"Issue completed successfully.",
+    "image":""
 }
 
 
@@ -192,6 +194,11 @@ Authorization: {{token}}
     "requestId":"6a192e048b0ca59fa83600ec",
     "message":"Issue completed successfully."
 }
+
+### Get Assigned Tickets
+GET {{url}}/api/v1/employee/get-assigned-requests?page=1&limit=10&today=true HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
 
 
 
@@ -372,5 +379,10 @@ Authorization: {{token}}
 
 ### get-tickets
 GET {{url}}/api/v1/user/get-tickets?page=1&limit=10 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### get-assigned-requests
+GET {{url}}/api/v1/user/get-service-requests?page=1&limit=10&status= HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}

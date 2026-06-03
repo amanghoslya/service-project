@@ -267,7 +267,7 @@ class _JobscreenState extends State<Jobscreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => Detilesscreen(),
+                                      builder: (context) => Detilesscreen(requestId: '',),
                                     ),
                                   );
                                 },

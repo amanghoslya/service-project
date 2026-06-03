@@ -1,20 +1,25 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/screen/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Completejobscreen extends StatefulWidget {
-  const Completejobscreen({super.key});
+class Completejobscreen extends ConsumerStatefulWidget {
+  final String requestID;
+  const Completejobscreen({super.key, required this.requestID});
 
   @override
-  State<Completejobscreen> createState() => _CompletejobscreenState();
+  ConsumerState<Completejobscreen> createState() => _CompletejobscreenState();
 }
 
-class _CompletejobscreenState extends State<Completejobscreen> {
+class _CompletejobscreenState extends ConsumerState<Completejobscreen> {
   List<File> _image = [];
 
   final ImagePicker picker = ImagePicker();
@@ -70,6 +75,9 @@ class _CompletejobscreenState extends State<Completejobscreen> {
       ),
     );
   }
+
+  final remarkController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +190,7 @@ class _CompletejobscreenState extends State<Completejobscreen> {
               TextField(
                 maxLines: 5,
                 minLines: 5,
+                controller: remarkController,
                 scrollPadding: EdgeInsets.only(top: 11.h, left: 15.w),
                 style: GoogleFonts.parkinsans(
                   fontSize: 16.sp,
@@ -303,20 +312,57 @@ class _CompletejobscreenState extends State<Completejobscreen> {
                   }),
                 ),
               SizedBox(height: 24.h),
-              Container(
-                height: 59.h,
-                decoration: BoxDecoration(
-                  color: Color(0xffF2D701),
-                  borderRadius: BorderRadius.circular(50.r),
-                ),
-                child: Center(
-                  child: Text(
-                    "Mark as Completed",
-                    style: GoogleFonts.outfit(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff04254E),
-                    ),
+              InkWell(
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    final service = ref.read(authServiceProvider);
+                    final isSucess = await service.requestComplete(
+                      requestId: widget.requestID,
+                      remark: remarkController.text.trim(),
+                      uploadImage: _image.isNotEmpty ? _image.first : null,
+                    );
+                    if (isSucess) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        CupertinoPageRoute(builder: (context) => MyBottomNav()),
+                        (route) => false,
+                      );
+                    }
+                  } catch (e, st) {
+                    log(e.toString());
+                  } finally {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                },
+                child: Container(
+                  height: 59.h,
+                  decoration: BoxDecoration(
+                    color: Color(0xffF2D701),
+                    borderRadius: BorderRadius.circular(50.r),
+                  ),
+                  child: Center(
+                    child: isLoading
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 1.4,
+                            ),
+                          )
+                        : Text(
+                            "Mark as Completed",
+                            style: GoogleFonts.outfit(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff04254E),
+                            ),
+                          ),
                   ),
                 ),
               ),

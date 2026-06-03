@@ -567,7 +567,7 @@ class _HomescreenState extends ConsumerState<Homescreen> {
                       child: Stack(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(20.r),
                             child: Image.asset(
                               employee[index]["image"],
                               width: 365.w,

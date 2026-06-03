@@ -350,7 +350,10 @@ class _YourschedulescreenState extends ConsumerState<Yourschedulescreen> {
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
-                                      builder: (context) => Detilesscreen(),
+                                      builder: (context) => Detilesscreen(
+                                        requestId:
+                                            data.data!.list?[index].id ?? "",
+                                      ),
                                     ),
                                   );
                                 }
@@ -397,9 +400,7 @@ class _YourschedulescreenState extends ConsumerState<Yourschedulescreen> {
                                           ),
                                         ),
                                 ),
-
                                 SizedBox(width: 10.w),
-
                                 InkWell(
                                   onTap: () {
                                     Navigator.push(

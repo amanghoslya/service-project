@@ -93,6 +93,7 @@ class _CompletescreenState extends ConsumerState<Completescreen> {
               ],
             ),
           ),
+          SizedBox(height: 16.h),
           completeRequestState.when(
             data: (data) {
               if (data.data?.list == null || data.data!.list!.isEmpty) {
@@ -270,7 +271,9 @@ class _CompletescreenState extends ConsumerState<Completescreen> {
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                  builder: (context) => Detilesscreen(),
+                                  builder: (context) => Detilesscreen(
+                                    requestId: data.data!.list![index].id ?? "",
+                                  ),
                                 ),
                               );
                             },

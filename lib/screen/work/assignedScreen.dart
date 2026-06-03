@@ -240,7 +240,9 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                               Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                  builder: (context) => Detilesscreen(),
+                                  builder: (context) => Detilesscreen(
+                                    requestId: data.data!.list![index].id ?? "",
+                                  ),
                                 ),
                               );
                             },

@@ -43,6 +43,8 @@ import 'package:dwelleasy_ghana/data/model/loginBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/loginResModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerResModel.dart';
+import 'package:dwelleasy_ghana/data/model/requestCompleteBodyModel.dart';
+import 'package:dwelleasy_ghana/data/model/requestCompleteResModel.dart';
 import 'package:dwelleasy_ghana/data/model/sendMessageBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/sendMessageResModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileBodyModel.dart';
@@ -124,6 +126,11 @@ abstract class ApiStateNetwork {
 
   @POST("/api/v1/employee/send-message")
   Future<SendMessageResModel> sendMessage(@Body() SendMessageBodyModel body);
+
+  @POST("/api/v1/employee/complete-request")
+  Future<RequestCompleteResModel> requestComplete(
+    @Body() RequestCompleteBodyModel body,
+  );
 
   ////////////////////////////////  Client (user) ////////////////////////////
   ////////////////////////////////////////////////////////////////////////
