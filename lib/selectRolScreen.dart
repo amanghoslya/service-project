@@ -28,7 +28,9 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
           children: [
             SizedBox(height: 100.h),
             Image.asset(
-              "assets/dwell.png",
+              // "assets/dwell.png",
+              // "assets/logo.jpeg",
+              "assets/logoremovebg.png",
               width: 191.w,
               height: 147.h,
               fit: BoxFit.contain,

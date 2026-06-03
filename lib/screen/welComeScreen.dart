@@ -21,11 +21,23 @@ class WelComeScreen extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 123.h),
-            Image.asset(
-              "assets/dwell.png",
+            Container(
               width: 191.w,
               height: 147.h,
-              fit: BoxFit.contain,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.r),
+                color: Colors.white,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: Image.asset(
+                  // "assets/dwell.png",
+                  "assets/logoremovebg.png",
+                  width: 191.w,
+                  height: 147.h,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
             SizedBox(height: 20.h),
             Text(

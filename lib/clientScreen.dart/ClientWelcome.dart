@@ -26,7 +26,8 @@ class _ClientwelcomeState extends State<Clientwelcome> {
           children: [
             SizedBox(height: 123.h),
             Image.asset(
-              "assets/dwell.png",
+              // "assets/dwell.png",
+              "assets/logoremovebg.png",
               width: 191.w,
               height: 147.h,
               fit: BoxFit.contain,
