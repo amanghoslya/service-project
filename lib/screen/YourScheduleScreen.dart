@@ -1,23 +1,33 @@
+import 'dart:developer' show log;
+
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
+import 'package:dwelleasy_ghana/screen/detilesScreen.dart';
 import 'package:dwelleasy_ghana/screen/quickMessageScreen.dart';
 import 'package:dwelleasy_ghana/screen/quickMessageScreenDetiles.dart';
+import 'package:dwelleasy_ghana/screen/work/provider/getAssignRequestProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class Yourschedulescreen extends StatefulWidget {
+class Yourschedulescreen extends ConsumerStatefulWidget {
   final bool isShowBack;
   const Yourschedulescreen({super.key, this.isShowBack = true});
 
   @override
-  State<Yourschedulescreen> createState() => _YourschedulescreenState();
+  ConsumerState<Yourschedulescreen> createState() => _YourschedulescreenState();
 }
 
-class _YourschedulescreenState extends State<Yourschedulescreen> {
+class _YourschedulescreenState extends ConsumerState<Yourschedulescreen> {
   int select = 0;
+  bool isLoading = false;
+  String? loadingRequestId;
   @override
   Widget build(BuildContext context) {
+    final assignRequestState = ref.watch(getAssignRequestProvider);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: Column(
@@ -174,144 +184,280 @@ class _YourschedulescreenState extends State<Yourschedulescreen> {
               ),
             ],
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
-                padding: EdgeInsets.only(
-                  top: 15.h,
-                  left: 15.w,
-                  right: 15.w,
-                  bottom: 13.h,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xff34383D),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 🔥 Date
-                    Text(
-                      "19 Apr 2025",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    SizedBox(height: 14.h),
-                    // 🔥 Time
-                    Text(
-                      "Time: 9:00 AM - 9:30 AM",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      "Area: Thema",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-
-                    SizedBox(height: 10.h),
-
-                    // 🔥 Service
-                    Text(
-                      "Service: AC Repair",
-                      style: GoogleFonts.parkinsans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-
-                    SizedBox(height: 14.h),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Quickmessagescreen(),
-                          ),
-                        );
-                      },
-                      child: Row(
+          SizedBox(height: 20.h),
+          assignRequestState.when(
+            data: (data) {
+              if (data.data?.list == null || data.data!.list!.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.h,
-                              horizontal: 34.w,
-                            ),
+                            height: 90.h,
+                            width: 90.w,
                             decoration: BoxDecoration(
-                              color: const Color(0xff6CE227),
-                              borderRadius: BorderRadius.circular(50.r),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Approve",
-                              style: GoogleFonts.outfit(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: const Color(0xff04254E),
-                                letterSpacing: -0.5,
+                              color: const Color(0xff34383D),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: const Color(0xffF2D701),
+                                width: 2,
                               ),
+                            ),
+                            child: Icon(
+                              Icons.assignment_turned_in_outlined,
+                              size: 45.sp,
+                              color: const Color(0xffF2D701),
                             ),
                           ),
 
-                          SizedBox(width: 10.w),
+                          SizedBox(height: 20.h),
 
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) =>
-                                      Quickmessagescreendetiles(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10.h,
-                                horizontal: 19.w,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF2D701),
-                                borderRadius: BorderRadius.circular(50.r),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Send Message",
-                                style: GoogleFonts.outfit(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xff04254E),
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
+                          Text(
+                            "No Assign Jobs",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.outfit(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          SizedBox(height: 10.h),
+
+                          Text(
+                            "You don't have any assign work requests yet.",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.parkinsans(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white70,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
+                );
+              }
+              return Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: data.data?.list?.length,
+                  itemBuilder: (context, index) {
+                    final assign = data.data!.list![index];
+                    final preferredDate = DateTime.fromMillisecondsSinceEpoch(
+                      assign.preferredDate ?? 0,
+                    );
+
+                    final formattedDate = DateFormat(
+                      "dd MMM yyyy",
+                    ).format(preferredDate);
+
+                    return Container(
+                      margin: EdgeInsets.only(
+                        left: 16.w,
+                        right: 16.w,
+                        bottom: 16.h,
+                      ),
+                      padding: EdgeInsets.only(
+                        top: 15.h,
+                        left: 15.w,
+                        right: 15.w,
+                        bottom: 13.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xff34383D),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 🔥 Date
+                          Text(
+                            // "20 Apr 2025",
+                            formattedDate,
+                            style: GoogleFonts.parkinsans(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+
+                          SizedBox(height: 14.h),
+
+                          // 🔥 Time
+                          Text(
+                            "Time: 9:00 AM - 1:00 PM",
+                            style: GoogleFonts.parkinsans(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+
+                          SizedBox(height: 10.h),
+                          Text(
+                            "Area: Thema",
+                            style: GoogleFonts.parkinsans(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+
+                          SizedBox(height: 10.h),
+
+                          // 🔥 Service
+                          Text(
+                            // "Service: AC Repair",
+                            "Service: ${assign.serviceId?.name ?? ""}",
+                            style: GoogleFonts.parkinsans(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+
+                          SizedBox(height: 14.h),
+                          InkWell(
+                            onTap: () async {
+                              setState(() {
+                                loadingRequestId = assign.id;
+                              });
+                              try {
+                                final acceptService = ref.read(
+                                  authServiceProvider,
+                                );
+                                final res = await acceptService.acceptRequest(
+                                  requestId: data.data!.list?[index].id ?? "",
+                                );
+                                if (res == true) {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   CupertinoPageRoute(
+                                  //     builder: (context) =>
+                                  //         Quickmessagescreen(),
+                                  //   ),
+                                  // );
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => Detilesscreen(),
+                                    ),
+                                  );
+                                }
+                              } catch (e, st) {
+                                log(e.toString());
+                              } finally {
+                                setState(() {
+                                  loadingRequestId = null;
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 10.h,
+                                    horizontal: 34.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff6CE227),
+                                    borderRadius: BorderRadius.circular(50.r),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: loadingRequestId == assign.id
+                                      ? Center(
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 20.h,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                                strokeWidth: 1.w,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          "Approve",
+                                          style: GoogleFonts.outfit(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: const Color(0xff04254E),
+                                            letterSpacing: -0.5,
+                                          ),
+                                        ),
+                                ),
+
+                                SizedBox(width: 10.w),
+
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            Quickmessagescreendetiles(
+                                              requestID: data
+                                                  .data!
+                                                  .list![index]
+                                                  .id
+                                                  .toString(),
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 10.h,
+                                      horizontal: 19.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffF2D701),
+                                      borderRadius: BorderRadius.circular(50.r),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Send Message",
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xff04254E),
+                                        letterSpacing: -0.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               );
             },
+            error: (error, stackTrace) {
+              log(error.toString());
+              return Center(child: Text("Something went wrong"));
+            },
+            loading: () => SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
+              child: Center(
+                child: CircularProgressIndicator(color: AppColors.buttonBg),
+              ),
+            ),
           ),
         ],
       ),

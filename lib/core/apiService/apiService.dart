@@ -20,6 +20,7 @@ import 'package:dwelleasy_ghana/data/ClientModel/getMyPlanRequestServiceModel.da
 import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceDetailsModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceListModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/getServiceRequestModel.dart';
+import 'package:dwelleasy_ghana/data/model/acceptRequestBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/createLeaveRequestBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/createLeaveRequestResModel.dart';
 import 'package:dwelleasy_ghana/data/model/createTicketBodyModel.dart';
@@ -35,6 +36,7 @@ import 'package:dwelleasy_ghana/data/model/getServiceResModel.dart';
 import 'package:dwelleasy_ghana/data/model/getTicketModel.dart';
 import 'package:dwelleasy_ghana/data/model/loginBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerBodyModel.dart';
+import 'package:dwelleasy_ghana/data/model/sendMessageBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileResModel.dart';
 import 'package:dwelleasy_ghana/data/model/verifyOrCreatePasswordBody.dart';
@@ -287,8 +289,8 @@ class AuthService {
       throw Exception(e.toString());
     }
   }
- 
- Future<GetAssignCount> getAssignCount() async {
+
+  Future<GetAssignCount> getAssignCount() async {
     try {
       final response = await api.getAssignCount();
       if (response.code == 0 && response.error == false) {
@@ -300,9 +302,7 @@ class AuthService {
     }
   }
 
-  
- 
- Future<GetAssignedRequestsModel> getAssignRequestList() async {
+  Future<GetAssignedRequestsModel> getAssignRequestList() async {
     try {
       final response = await api.getAssignRequest();
       if (response.code == 0 && response.error == false) {
@@ -326,7 +326,7 @@ class AuthService {
     }
   }
 
- Future<GetCompleteRequestsModel> getCompleteRequestList() async {
+  Future<GetCompleteRequestsModel> getCompleteRequestList() async {
     try {
       final response = await api.getCompleteRequest();
       if (response.code == 0 && response.error == false) {
@@ -338,11 +338,42 @@ class AuthService {
     }
   }
 
-  
+  Future<bool> acceptRequest({required String requestId}) async {
+    try {
+      final body = AcceptRequestBodyModel(requestId: requestId);
+      final response = await api.acceptRequest(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Login Success");
+        showSuccessSnackBar(response.message ?? "Sucess");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("ERROR => $e");
+      log("STACK TRACE => $st");
+      return false;
+    }
+  }
 
-
-
-
+  Future<bool> sendMessage({
+    required String requestId,
+    required String message,
+  }) async {
+    try {
+      final body = SendMessageBodyModel(requestId: requestId, message: message);
+      final response = await api.sendMessage(body);
+      if (response.code == 0 && response.error == false) {
+        log(response.message ?? "Login Success");
+        showSuccessSnackBar(response.message ?? "Sucess");
+        return true;
+      }
+      return false;
+    } catch (e, st) {
+      log("ERROR => $e");
+      log("STACK TRACE => $st");
+      return false;
+    }
+  }
 
   /////////////////////////////////  Client (User) //////////////////////////////
   Future<bool> clientRegister({

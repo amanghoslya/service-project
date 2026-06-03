@@ -1,17 +1,26 @@
+import 'dart:developer';
+import 'dart:isolate';
+
+import 'package:dwelleasy_ghana/core/apiService/apiServiceProvider.dart';
 import 'package:dwelleasy_ghana/core/constant/appColors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Quickmessagescreendetiles extends StatefulWidget {
-  const Quickmessagescreendetiles({super.key});
+class Quickmessagescreendetiles extends ConsumerStatefulWidget {
+  final String requestID;
+  const Quickmessagescreendetiles({super.key, required this.requestID});
 
   @override
-  State<Quickmessagescreendetiles> createState() =>
+  ConsumerState<Quickmessagescreendetiles> createState() =>
       _QuickmessagescreendetilesState();
 }
 
-class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
+class _QuickmessagescreendetilesState
+    extends ConsumerState<Quickmessagescreendetiles> {
+  final messageController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +61,7 @@ class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
                     ),
                   ),
                 ),
-          
+
                 // 🔥 Center Text
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -67,9 +76,9 @@ class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
                         letterSpacing: -0.5,
                       ),
                     ),
-          
+
                     SizedBox(height: 8.h),
-          
+
                     Text(
                       "View your assigned shifts and timings",
                       textAlign: TextAlign.center,
@@ -104,7 +113,7 @@ class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
                 TextField(
                   maxLines: 5,
                   minLines: 5,
-
+                  controller: messageController,
                   scrollPadding: EdgeInsets.only(top: 13.h, left: 14.w),
 
                   style: GoogleFonts.parkinsans(
@@ -151,21 +160,56 @@ class _QuickmessagescreendetilesState extends State<Quickmessagescreendetiles> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 15.h),
-                  decoration: BoxDecoration(
-                    color: Color(0xffF2D701),
-                    borderRadius: BorderRadius.circular(50.r),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Send",
-                      style: GoogleFonts.outfit(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                        color: Color(0xff04254E),
-                        letterSpacing: -0.5,
-                      ),
+                InkWell(
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    if (messageController.text.trim().isEmpty) {
+                      return;
+                    }
+                    try {
+                      final service = ref.read(authServiceProvider);
+                      final isSucess = await service.sendMessage(
+                        requestId: widget.requestID,
+                        message: messageController.text.trim(),
+                      );
+                      if (isSucess == true) {
+                        messageController.clear();
+                      }
+                    } catch (e) {
+                      log(e.toString());
+                    } finally {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 15.h),
+                    decoration: BoxDecoration(
+                      color: Color(0xffF2D701),
+                      borderRadius: BorderRadius.circular(50.r),
+                    ),
+                    child: Center(
+                      child: isLoading
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.h,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 1.4,
+                              ),
+                            )
+                          : Text(
+                              "Send",
+                              style: GoogleFonts.outfit(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                                color: Color(0xff04254E),
+                                letterSpacing: -0.5,
+                              ),
+                            ),
                     ),
                   ),
                 ),

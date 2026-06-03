@@ -23,6 +23,8 @@ import 'package:dwelleasy_ghana/data/ClientModel/getMyPlanRequestServiceModel.da
 import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceDetailsModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/getPlanServiceListModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/getServiceRequestModel.dart';
+import 'package:dwelleasy_ghana/data/model/acceptRequestBodyModel.dart';
+import 'package:dwelleasy_ghana/data/model/acceptRequestResModel.dart';
 import 'package:dwelleasy_ghana/data/model/createLeaveRequestBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/createLeaveRequestResModel.dart';
 import 'package:dwelleasy_ghana/data/model/createTicketBodyModel.dart';
@@ -41,6 +43,8 @@ import 'package:dwelleasy_ghana/data/model/loginBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/loginResModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/registerResModel.dart';
+import 'package:dwelleasy_ghana/data/model/sendMessageBodyModel.dart';
+import 'package:dwelleasy_ghana/data/model/sendMessageResModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileBodyModel.dart';
 import 'package:dwelleasy_ghana/data/model/updateProfileResModel.dart';
 import 'package:dwelleasy_ghana/data/model/uploadImageResModel.dart';
@@ -112,6 +116,14 @@ abstract class ApiStateNetwork {
 
   @GET("/api/v1/employee/get-completed-requests?page=1&limit=10")
   Future<GetCompleteRequestsModel> getCompleteRequest();
+
+  @POST("/api/v1/employee/accept-request")
+  Future<AcceptRequestResModel> acceptRequest(
+    @Body() AcceptRequestBodyModel body,
+  );
+
+  @POST("/api/v1/employee/send-message")
+  Future<SendMessageResModel> sendMessage(@Body() SendMessageBodyModel body);
 
   ////////////////////////////////  Client (user) ////////////////////////////
   ////////////////////////////////////////////////////////////////////////
