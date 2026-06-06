@@ -69,7 +69,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: const Color(0xff04254E),
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.64,
                         height: 1,
                       ),
                     ),
@@ -83,7 +83,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
                         color: Color.fromRGBO(4, 37, 78, 0.8),
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.56,
                         height: 1,
                       ),
                     ),
@@ -130,6 +130,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
+                              letterSpacing: -0.72
                             ),
                           ),
 
@@ -142,6 +143,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w400,
                               color: Colors.white70,
+                              letterSpacing: -0.56
                             ),
                           ),
                         ],
@@ -205,7 +207,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.white,
-                              letterSpacing: -0.5,
+                              letterSpacing: -0.64,
                             ),
                           ),
 
@@ -216,7 +218,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.white,
-                              letterSpacing: -0.5,
+                              letterSpacing: -0.64,
                             ),
                           ),
 
@@ -230,7 +232,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
                               color: Colors.white,
-                              letterSpacing: -0.5,
+                              letterSpacing: -0.64,
                             ),
                           ),
 
@@ -259,7 +261,7 @@ class _AssignedscreenState extends ConsumerState<Assignedscreen> {
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xff04254E),
-                                    letterSpacing: -0.5,
+                                    letterSpacing: -0.64,
                                   ),
                                 ),
                               ),

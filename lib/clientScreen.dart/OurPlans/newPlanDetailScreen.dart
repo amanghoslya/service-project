@@ -462,7 +462,7 @@ class _NewPlanDetailScreenState extends ConsumerState<NewPlanDetailScreen> {
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
                             color: const Color(0xFF8D8D8D),
-                            letterSpacing: -0.3,
+                            letterSpacing: -0.56,
                           ),
                         ),
 
@@ -702,7 +702,7 @@ class _NewPlanDetailScreenState extends ConsumerState<NewPlanDetailScreen> {
           fontSize: 13.sp,
           fontWeight: FontWeight.w600,
           color: const Color(0xff04254E),
-          letterSpacing: -0.5,
+          letterSpacing: -0.56,
         ),
       ),
     );

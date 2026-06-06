@@ -78,6 +78,7 @@ class _ClientwelcomeState extends State<Clientwelcome> {
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF04254E),
+                      letterSpacing: -0.48,
                     ),
                   ),
                 ],
@@ -115,6 +116,7 @@ class _ClientwelcomeState extends State<Clientwelcome> {
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.buttonText,
+                  letterSpacing: -0.56,
                 ),
               ),
             ),
@@ -128,6 +130,7 @@ class _ClientwelcomeState extends State<Clientwelcome> {
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
                       color: AppColors.buttonText,
+                      letterSpacing: -0.64,
                     ),
                   ),
 
@@ -139,6 +142,7 @@ class _ClientwelcomeState extends State<Clientwelcome> {
                       color: AppColors.buttonText,
                       decoration: TextDecoration.underline,
                       decorationColor: AppColors.buttonText,
+                      letterSpacing: -0.64,
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {

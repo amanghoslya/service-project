@@ -65,7 +65,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: const Color(0xff04254E),
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.64,
                         height: 1,
                       ),
                     ),
@@ -79,7 +79,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
                         color: const Color(0xff04254E),
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.56,
                         height: 1,
                       ),
                     ),
@@ -117,7 +117,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         fontWeight: FontWeight.w500,
                         fontSize: 18.sp,
                         color: Colors.white,
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.72,
                       ),
                     ),
 
@@ -130,7 +130,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
                         color: Colors.white,
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.64,
                       ),
                     ),
 
@@ -141,7 +141,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
                         color: Colors.white,
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.64,
                       ),
                     ),
 
@@ -154,7 +154,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
                         color: Colors.white,
-                        letterSpacing: -0.5,
+                        letterSpacing: -0.64,
                       ),
                     ),
 
@@ -164,7 +164,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => Detilesscreen(requestId: '',),
+                            builder: (context) => Detilesscreen(requestId: ''),
                           ),
                         );
                       },
@@ -181,7 +181,7 @@ class _QuickmessagescreenState extends State<Quickmessagescreen> {
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
                               color: Color(0xff04254E),
-                              letterSpacing: -0.5,
+                              letterSpacing: -0.64,
                             ),
                           ),
                         ),

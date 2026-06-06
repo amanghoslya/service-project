@@ -82,7 +82,6 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                     fontSize: 29.sp,
                     fontWeight: FontWeight.w500,
                     color: AppColors.buttonText,
-                    letterSpacing: -0.3,
                   ),
                 ),
                 SizedBox(height: 10.h),
@@ -93,7 +92,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColors.buttonText,
-                    letterSpacing: -0.3,
+                    letterSpacing: -0.42,
                   ),
                 ),
                 SizedBox(height: 10.h),
@@ -105,7 +104,6 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                     fontSize: 29.sp,
                     fontWeight: FontWeight.w500,
                     color: Color(0xff46BE00),
-                    letterSpacing: -0.3,
                   ),
                 ),
                 SizedBox(height: 20.h),
@@ -135,7 +133,6 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                         fontWeight: FontWeight.w500,
                         color: AppColors.buttonText,
                         fontSize: 18.sp,
-                        letterSpacing: -0.3,
                       ),
                     ),
                   ),
@@ -191,7 +188,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
                 color: Color(0xff000000),
-                letterSpacing: -0.3,
+                letterSpacing: -0.64,
               ),
             ),
             SizedBox(height: 4.h),
@@ -201,7 +198,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
                 color: Color(0xff000000),
-                letterSpacing: -0.3,
+                letterSpacing: -0.56,
               ),
               textAlign: TextAlign.center,
             ),
@@ -233,7 +230,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                     style: GoogleFonts.parkinsans(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
-                      letterSpacing: -0.3,
+                      letterSpacing: -0.56,
                       color: AppColors.buttonText,
                     ),
                   ),
@@ -247,6 +244,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
                             fontWeight: FontWeight.w500,
+                            letterSpacing: -0.48
                           ),
                         ),
                         TextSpan(
@@ -255,6 +253,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
                             fontWeight: FontWeight.w400,
+                            letterSpacing: -0.48
                           ),
                         ),
                       ],
@@ -270,6 +269,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
                             fontWeight: FontWeight.w500,
+                            letterSpacing: -0.48
                           ),
                         ),
                         TextSpan(
@@ -278,6 +278,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
                             fontWeight: FontWeight.w400,
+                            letterSpacing: -0.48
                           ),
                         ),
                       ],
@@ -293,6 +294,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
                             fontWeight: FontWeight.w500,
+                            letterSpacing: -0.48
                           ),
                         ),
                         TextSpan(
@@ -302,6 +304,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                             fontSize: 12.sp,
                             color: AppColors.buttonText,
                             fontWeight: FontWeight.w400,
+                            letterSpacing: 0.48
                           ),
                         ),
                       ],
@@ -333,7 +336,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
                 color: AppColors.buttonText,
-                letterSpacing: -0.3,
+                letterSpacing: -0.56,
               ),
             ),
             SizedBox(height: 22.h),
@@ -458,7 +461,7 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
                         style: GoogleFonts.outfit(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w400,
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.64,
                           color: AppColors.buttonText,
                         ),
                       ),

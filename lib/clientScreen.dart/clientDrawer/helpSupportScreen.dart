@@ -69,7 +69,7 @@ class _HelpsupportscreenState extends ConsumerState<Helpsupportscreen> {
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.buttonText,
-                letterSpacing: -0.3,
+                letterSpacing: -0.72,
               ),
             ),
             SizedBox(height: 7.h),
@@ -79,7 +79,7 @@ class _HelpsupportscreenState extends ConsumerState<Helpsupportscreen> {
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
                 color: Color.fromRGBO(4, 37, 78, 0.7),
-                letterSpacing: -0.3,
+                letterSpacing: -0.56
               ),
             ),
           ],
@@ -98,7 +98,7 @@ class _HelpsupportscreenState extends ConsumerState<Helpsupportscreen> {
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
                   color: AppColors.buttonText,
-                  letterSpacing: -0.3,
+                  letterSpacing: -0.56,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -120,7 +120,7 @@ class _HelpsupportscreenState extends ConsumerState<Helpsupportscreen> {
                       style: GoogleFonts.parkinsans(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.56,
                         color: AppColors.buttonText,
                       ),
                     ),
@@ -133,7 +133,7 @@ class _HelpsupportscreenState extends ConsumerState<Helpsupportscreen> {
                 style: GoogleFonts.parkinsans(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
-                  letterSpacing: -0.3,
+                  letterSpacing: -0.56,
                   color: AppColors.buttonText,
                 ),
               ),
@@ -143,7 +143,7 @@ class _HelpsupportscreenState extends ConsumerState<Helpsupportscreen> {
                 style: GoogleFonts.parkinsans(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
-                  letterSpacing: -0.3,
+                  letterSpacing: -0.55,
                   color: AppColors.buttonText,
                 ),
               ),

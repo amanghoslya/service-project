@@ -67,7 +67,7 @@ class _ClientloginscreenState extends ConsumerState<Clientloginscreen> {
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w400,
                     color: Color(0xff747474),
-                    letterSpacing: -0.5,
+                    letterSpacing: -0.64,
                     fontSize: 16.sp,
                   ),
                 ),
@@ -206,7 +206,7 @@ class _ClientloginscreenState extends ConsumerState<Clientloginscreen> {
             style: GoogleFonts.outfit(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              letterSpacing: -0.5,
+              letterSpacing: -0.64,
               color: AppColors.buttonText,
             ),
           ),
