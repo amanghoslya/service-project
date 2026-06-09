@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dwelleasy_ghana/core/network/api.stateNetwork.dart';
@@ -14,6 +15,7 @@ import 'package:dwelleasy_ghana/data/ClientModel/CVerifyOrCreatePassBodyModel.da
 import 'package:dwelleasy_ghana/data/ClientModel/CVerifyOrCreatePassResModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/clientCreateTicketBodyModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/clientGetTicketModel.dart';
+import 'package:dwelleasy_ghana/data/ClientModel/clientNotificationModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/createPlanReqiestBodyModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/createServiceRequestBodyModel.dart';
 import 'package:dwelleasy_ghana/data/ClientModel/getMyPlanRequestServiceModel.dart';
@@ -30,6 +32,7 @@ import 'package:dwelleasy_ghana/data/model/getAssignCountModel.dart';
 import 'package:dwelleasy_ghana/data/model/getAssigneRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getCompleteRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getMyLeaveModel.dart';
+import 'package:dwelleasy_ghana/data/model/getNotificationModel.dart';
 import 'package:dwelleasy_ghana/data/model/getPendingRequestModel.dart';
 import 'package:dwelleasy_ghana/data/model/getProfileModel.dart';
 import 'package:dwelleasy_ghana/data/model/getServiceResModel.dart';
@@ -43,6 +46,8 @@ import 'package:dwelleasy_ghana/data/model/updateProfileResModel.dart';
 import 'package:dwelleasy_ghana/data/model/verifyOrCreatePasswordBody.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
+
+import '../../data/ClientModel/CGetMyPlanRequestModel.dart' show CGetMyPlanRequestModel, GetMyPlanRequestModel;
 
 class AuthService {
   final ApiStateNetwork api;
@@ -409,6 +414,19 @@ class AuthService {
     }
   }
 
+  Future<GetNotificationModel> getNotification() async {
+    try {
+      final response = await api.getNotification();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e, st) {
+      log(st.toString());
+      throw Exception(e.toString());
+    }
+  }
+
   /////////////////////////////////  Client (User) //////////////////////////////
   Future<bool> clientRegister({
     required String fullName,
@@ -613,6 +631,19 @@ class AuthService {
     }
   }
 
+  Future<CGetMyPlanRequestModel> clientGetMyPlanRequest() async {
+    try {
+      final response = await api.clientGetMyPlanRequest();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+
   Future<bool> clientCreatePlanRequest({
     required String fullName,
     required String email,
@@ -775,4 +806,20 @@ class AuthService {
       throw Exception(e.toString());
     }
   }
+
+  Future<ClientNotificationModel> clientGetNotification() async {
+    try {
+      final response = await api.clientGetNotification();
+      if (response.code == 0 && response.error == false) {
+        return response;
+      }
+      return throw Exception(response.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+  
+
+
+
 }

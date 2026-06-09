@@ -32,11 +32,11 @@ class _ClientpaymentscreenState extends ConsumerState<Clientpaymentscreen> {
   String? selectedPayment;
 
   List<String> paymentList = [
-    "Mobile Money (MTN)",
-    "Mobile Money (Vodafone)",
-    "Mobile Money (Airteltigo)",
-    "Bank Transfer",
-    "Cash (Office Only)",
+    "mtn",
+    "vodafone",
+    "airteltigo",
+    "card",
+    "bank_transfer",
   ];
   void showPaymentDialog() {
     showDialog(
